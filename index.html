@@ -87,6 +87,30 @@
       border-color: #d4d1cc;
     }
 
+    .sidebar-nav {
+      padding: 0 16px 8px;
+    }
+
+    .sidebar-nav a {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-tertiary);
+      text-decoration: none;
+      padding: 5px 10px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      transition: all 0.15s ease;
+    }
+
+    .sidebar-nav a:hover {
+      color: var(--text-secondary);
+      background: var(--surface-hover);
+      border-color: #d4d1cc;
+    }
+
     /* ── Sidebar search ── */
     .sidebar-search {
       padding: 0 16px 12px;
@@ -865,6 +889,15 @@
           <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
         </svg>
       </button>
+    </div>
+
+    <div class="sidebar-nav">
+      <a href="/experiment">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/>
+        </svg>
+        Experiments
+      </a>
     </div>
 
     <div class="sidebar-search">
