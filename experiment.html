@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loader Experiments</title>
+  <style>
+    /* ── Reset & Tokens ── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Roboto, sans-serif;
+      --radius: 12px;
+      --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    [data-theme="light"] {
+      --bg: #fafafa;
+      --bg-subtle: #f5f5f5;
+      --surface: #ffffff;
+      --surface-hover: #fafafa;
+      --border: #e5e5e5;
+      --border-subtle: #ebebeb;
+      --text-primary: #0a0a0a;
+      --text-secondary: #525252;
+      --text-tertiary: #a3a3a3;
+      --dot: #0a0a0a;
+      --dot-muted: rgba(10, 10, 10, 0.12);
+      --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-lg: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    [data-theme="dark"] {
+      --bg: #0a0a0a;
+      --bg-subtle: #141414;
+      --surface: #1a1a1a;
+      --surface-hover: #1f1f1f;
+      --border: #262626;
+      --border-subtle: #1f1f1f;
+      --text-primary: #fafafa;
+      --text-secondary: #a3a3a3;
+      --text-tertiary: #525252;
+      --dot: #fafafa;
+      --dot-muted: rgba(250, 250, 250, 0.1);
+      --shadow: 0 1px 3px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.2);
+      --shadow-lg: 0 4px 12px rgba(0,0,0,0.4);
+    }
+
+    body {
+      min-height: 100vh;
+      background: var(--bg);
+      font-family: var(--font);
+      color: var(--text-primary);
+      -webkit-font-smoothing: antialiased;
+      transition: background var(--transition), color var(--transition);
+    }
+
+    /* ── Top bar ── */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 32px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+      transition: background var(--transition), border-color var(--transition);
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .back-link {
+      font-size: 13px;
+      color: var(--text-tertiary);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .back-link:hover { color: var(--text-secondary); }
+
+    .topbar-title {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    .topbar-subtitle {
+      font-size: 12px;
+      color: var(--text-tertiary);
+      margin-left: 8px;
+      font-weight: 400;
+    }
+
+    /* ── Theme toggle ── */
+    .theme-toggle {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 3px;
+      transition: background var(--transition), border-color var(--transition);
+    }
+
+    .theme-toggle button {
+      padding: 6px 14px;
+      border: none;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--text-tertiary);
+      font-size: 12px;
+      font-weight: 500;
+      font-family: var(--font);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      line-height: 1;
+    }
+
+    .theme-toggle button.active {
+      background: var(--surface);
+      color: var(--text-primary);
+      box-shadow: var(--shadow);
+    }
+
+    /* ── Grid ── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+      padding: 32px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* ── Card ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px 24px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      transition: all var(--transition);
+    }
+
+    .card:hover {
+      border-color: var(--text-tertiary);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .card-loader {
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-primary);
+      letter-spacing: -0.01em;
+      text-align: center;
+    }
+
+    .card-desc {
+      font-size: 11px;
+      color: var(--text-tertiary);
+      text-align: center;
+      line-height: 1.4;
+      margin-top: -12px;
+    }
+
+    /* ─────────────────────────────────────
+       LOADER STYLES
+    ───────────────────────────────────── */
+
+    /* 1 ── Dot Grid (original) ── */
+    .loader-dot-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 4px;
+      width: 28px;
+      height: 28px;
+    }
+
+    .loader-dot-grid .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--dot);
+      animation: dotGridPulse 1.4s ease-in-out infinite;
+    }
+
+    .loader-dot-grid .dot:nth-child(1) { animation-delay: 0s; }
+    .loader-dot-grid .dot:nth-child(2) { animation-delay: 0.1s; }
+    .loader-dot-grid .dot:nth-child(3) { animation-delay: 0.2s; }
+    .loader-dot-grid .dot:nth-child(4) { animation-delay: 0.3s; }
+    .loader-dot-grid .dot:nth-child(5) { animation-delay: 0.4s; }
+    .loader-dot-grid .dot:nth-child(6) { animation-delay: 0.5s; }
+    .loader-dot-grid .dot:nth-child(7) { animation-delay: 0.6s; }
+    .loader-dot-grid .dot:nth-child(8) { animation-delay: 0.7s; }
+    .loader-dot-grid .dot:nth-child(9) { animation-delay: 0.8s; }
+
+    @keyframes dotGridPulse {
+      0%, 60%, 100% { opacity: 0.12; transform: scale(0.8); }
+      30% { opacity: 1; transform: scale(1.1); }
+    }
+
+    /* 2 ── Ring Spinner ── */
+    .loader-ring {
+      width: 28px;
+      height: 28px;
+      border: 2.5px solid var(--dot-muted);
+      border-top-color: var(--dot);
+      border-radius: 50%;
+      animation: ringRotate 0.8s linear infinite;
+    }
+
+    @keyframes ringRotate {
+      to { transform: rotate(360deg); }
+    }
+
+    /* 3 ── Pulse Ring ── */
+    .loader-pulse-ring {
+      width: 24px;
+      height: 24px;
+      position: relative;
+    }
+
+    .loader-pulse-ring::before,
+    .loader-pulse-ring::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border: 2px solid var(--dot);
+      border-radius: 50%;
+      animation: pulseRingExpand 1.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    }
+
+    .loader-pulse-ring::after {
+      animation-delay: 0.6s;
+    }
+
+    @keyframes pulseRingExpand {
+      0% { transform: scale(0.5); opacity: 1; }
+      100% { transform: scale(1.6); opacity: 0; }
+    }
+
+    /* 4 ── Bar Wave ── */
+    .loader-bars {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      height: 28px;
+    }
+
+    .loader-bars .bar {
+      width: 3px;
+      height: 8px;
+      border-radius: 2px;
+      background: var(--dot);
+      animation: barWave 1s ease-in-out infinite;
+    }
+
+    .loader-bars .bar:nth-child(1) { animation-delay: 0s; }
+    .loader-bars .bar:nth-child(2) { animation-delay: 0.1s; }
+    .loader-bars .bar:nth-child(3) { animation-delay: 0.2s; }
+    .loader-bars .bar:nth-child(4) { animation-delay: 0.3s; }
+    .loader-bars .bar:nth-child(5) { animation-delay: 0.4s; }
+
+    @keyframes barWave {
+      0%, 100% { height: 8px; opacity: 0.3; }
+      50% { height: 24px; opacity: 1; }
+    }
+
+    /* 5 ── Orbit ── */
+    .loader-orbit {
+      width: 28px;
+      height: 28px;
+      position: relative;
+      animation: orbitRotate 1.5s linear infinite;
+    }
+
+    .loader-orbit .orb {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--dot);
+    }
+
+    .loader-orbit .orb:nth-child(1) { top: 0; left: 50%; transform: translateX(-50%); opacity: 1; }
+    .loader-orbit .orb:nth-child(2) { top: 50%; right: 0; transform: translateY(-50%); opacity: 0.6; }
+    .loader-orbit .orb:nth-child(3) { bottom: 0; left: 50%; transform: translateX(-50%); opacity: 0.3; }
+    .loader-orbit .orb:nth-child(4) { top: 50%; left: 0; transform: translateY(-50%); opacity: 0.15; }
+
+    @keyframes orbitRotate {
+      to { transform: rotate(360deg); }
+    }
+
+    /* 6 ── Morphing Shape ── */
+    .loader-morph {
+      width: 24px;
+      height: 24px;
+      background: var(--dot);
+      animation: morph 2s ease-in-out infinite;
+    }
+
+    @keyframes morph {
+      0%, 100% { border-radius: 50%; transform: rotate(0deg) scale(1); }
+      25% { border-radius: 4px; transform: rotate(90deg) scale(0.85); }
+      50% { border-radius: 50% 4px; transform: rotate(180deg) scale(1); }
+      75% { border-radius: 4px 50%; transform: rotate(270deg) scale(0.85); }
+    }
+
+    /* 7 ── Line Sweep ── */
+    .loader-lines {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      width: 28px;
+    }
+
+    .loader-lines .line {
+      height: 2.5px;
+      border-radius: 2px;
+      background: var(--dot);
+      animation: lineSweep 1.2s ease-in-out infinite;
+      transform-origin: left center;
+    }
+
+    .loader-lines .line:nth-child(1) { animation-delay: 0s; }
+    .loader-lines .line:nth-child(2) { animation-delay: 0.15s; }
+    .loader-lines .line:nth-child(3) { animation-delay: 0.3s; }
+    .loader-lines .line:nth-child(4) { animation-delay: 0.45s; }
+
+    @keyframes lineSweep {
+      0%, 100% { transform: scaleX(0.3); opacity: 0.2; }
+      50% { transform: scaleX(1); opacity: 1; }
+    }
+
+    /* 8 ── Bouncing Dots ── */
+    .loader-bounce {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .loader-bounce .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--dot);
+      animation: bounce 1.2s ease-in-out infinite;
+    }
+
+    .loader-bounce .dot:nth-child(1) { animation-delay: 0s; }
+    .loader-bounce .dot:nth-child(2) { animation-delay: 0.15s; }
+    .loader-bounce .dot:nth-child(3) { animation-delay: 0.3s; }
+
+    @keyframes bounce {
+      0%, 80%, 100% { transform: translateY(0); opacity: 0.3; }
+      40% { transform: translateY(-10px); opacity: 1; }
+    }
+
+    /* 9 ── Square Cascade ── */
+    .loader-squares {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 3px;
+      width: 23px;
+      height: 23px;
+    }
+
+    .loader-squares .sq {
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      background: var(--dot);
+      animation: squareCascade 1.6s ease-in-out infinite;
+    }
+
+    .loader-squares .sq:nth-child(1) { animation-delay: 0s; }
+    .loader-squares .sq:nth-child(2) { animation-delay: 0.2s; }
+    .loader-squares .sq:nth-child(3) { animation-delay: 0.6s; }
+    .loader-squares .sq:nth-child(4) { animation-delay: 0.4s; }
+
+    @keyframes squareCascade {
+      0%, 70%, 100% { opacity: 0.1; transform: scale(0.85); }
+      35% { opacity: 1; transform: scale(1); }
+    }
+
+    /* 10 ── Diamond Rotate ── */
+    .loader-diamond {
+      width: 20px;
+      height: 20px;
+      position: relative;
+    }
+
+    .loader-diamond .d {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: var(--dot);
+      transform: rotate(45deg);
+      border-radius: 1.5px;
+      animation: diamondPulse 1.4s ease-in-out infinite;
+    }
+
+    .loader-diamond .d:nth-child(1) { top: 0; left: 6px; animation-delay: 0s; }
+    .loader-diamond .d:nth-child(2) { top: 6px; right: 0; animation-delay: 0.2s; }
+    .loader-diamond .d:nth-child(3) { bottom: 0; left: 6px; animation-delay: 0.4s; }
+    .loader-diamond .d:nth-child(4) { top: 6px; left: 0; animation-delay: 0.6s; }
+
+    @keyframes diamondPulse {
+      0%, 70%, 100% { opacity: 0.1; transform: rotate(45deg) scale(0.7); }
+      35% { opacity: 1; transform: rotate(45deg) scale(1); }
+    }
+
+    /* 11 ── Cross Fade ── */
+    .loader-cross {
+      width: 24px;
+      height: 24px;
+      position: relative;
+    }
+
+    .loader-cross .arm {
+      position: absolute;
+      background: var(--dot);
+      border-radius: 2px;
+      animation: crossFade 1.2s ease-in-out infinite;
+    }
+
+    .loader-cross .arm.h {
+      width: 24px;
+      height: 3px;
+      top: 50%;
+      left: 0;
+      transform: translateY(-50%);
+    }
+
+    .loader-cross .arm.v {
+      width: 3px;
+      height: 24px;
+      left: 50%;
+      top: 0;
+      transform: translateX(-50%);
+      animation-delay: 0.6s;
+    }
+
+    @keyframes crossFade {
+      0%, 100% { opacity: 0.15; }
+      50% { opacity: 1; }
+    }
+
+    /* 12 ── Staggered Scale ── */
+    .loader-stagger {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .loader-stagger .block {
+      width: 6px;
+      height: 6px;
+      border-radius: 1.5px;
+      background: var(--dot);
+      animation: staggerScale 1.2s ease-in-out infinite;
+    }
+
+    .loader-stagger .block:nth-child(1) { animation-delay: 0s; }
+    .loader-stagger .block:nth-child(2) { animation-delay: 0.12s; }
+    .loader-stagger .block:nth-child(3) { animation-delay: 0.24s; }
+    .loader-stagger .block:nth-child(4) { animation-delay: 0.36s; }
+    .loader-stagger .block:nth-child(5) { animation-delay: 0.48s; }
+
+    @keyframes staggerScale {
+      0%, 60%, 100% { transform: scale(0.6); opacity: 0.15; }
+      30% { transform: scale(1.3); opacity: 1; }
+    }
+
+    /* 13 ── Breathing Circle ── */
+    .loader-breathe {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--dot);
+      animation: breathe 2s ease-in-out infinite;
+    }
+
+    @keyframes breathe {
+      0%, 100% { transform: scale(0.6); opacity: 0.2; }
+      50% { transform: scale(1); opacity: 0.8; }
+    }
+
+    /* 14 ── Dash Spinner ── */
+    .loader-dash {
+      width: 26px;
+      height: 26px;
+      border: 2.5px solid transparent;
+      border-radius: 50%;
+      position: relative;
+      animation: dashSpin 1s linear infinite;
+    }
+
+    .loader-dash::before {
+      content: '';
+      position: absolute;
+      inset: -2.5px;
+      border: 2.5px solid transparent;
+      border-top-color: var(--dot);
+      border-right-color: var(--dot);
+      border-radius: 50%;
+      opacity: 0.8;
+    }
+
+    .loader-dash::after {
+      content: '';
+      position: absolute;
+      inset: 3px;
+      border: 2px solid transparent;
+      border-bottom-color: var(--dot);
+      border-radius: 50%;
+      opacity: 0.3;
+      animation: dashSpinReverse 0.6s linear infinite;
+    }
+
+    @keyframes dashSpin { to { transform: rotate(360deg); } }
+    @keyframes dashSpinReverse { to { transform: rotate(-360deg); } }
+
+    /* 15 ── Flip Square ── */
+    .loader-flip {
+      width: 22px;
+      height: 22px;
+      background: var(--dot);
+      border-radius: 3px;
+      animation: flipSquare 1.6s ease-in-out infinite;
+    }
+
+    @keyframes flipSquare {
+      0% { transform: perspective(200px) rotateX(0deg) rotateY(0deg); }
+      25% { transform: perspective(200px) rotateX(180deg) rotateY(0deg); }
+      50% { transform: perspective(200px) rotateX(180deg) rotateY(180deg); }
+      75% { transform: perspective(200px) rotateX(0deg) rotateY(180deg); }
+      100% { transform: perspective(200px) rotateX(0deg) rotateY(360deg); }
+    }
+
+    /* 16 ── Dot Trail ── */
+    .loader-trail {
+      width: 28px;
+      height: 28px;
+      position: relative;
+      animation: trailRotate 1.8s linear infinite;
+    }
+
+    .loader-trail .t {
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--dot);
+    }
+
+    .loader-trail .t:nth-child(1) { top: 0; left: 50%; transform: translateX(-50%); opacity: 1; }
+    .loader-trail .t:nth-child(2) { top: 3px; right: 3px; opacity: 0.75; width: 4.5px; height: 4.5px; }
+    .loader-trail .t:nth-child(3) { top: 50%; right: 0; transform: translateY(-50%); opacity: 0.5; width: 4px; height: 4px; }
+    .loader-trail .t:nth-child(4) { bottom: 3px; right: 3px; opacity: 0.3; width: 3.5px; height: 3.5px; }
+    .loader-trail .t:nth-child(5) { bottom: 0; left: 50%; transform: translateX(-50%); opacity: 0.15; width: 3px; height: 3px; }
+
+    @keyframes trailRotate { to { transform: rotate(360deg); } }
+
+    /* 17 ── Elastic Line ── */
+    .loader-elastic {
+      width: 32px;
+      height: 3px;
+      background: var(--dot-muted);
+      border-radius: 2px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .loader-elastic::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -40%;
+      width: 40%;
+      height: 100%;
+      background: var(--dot);
+      border-radius: 2px;
+      animation: elasticSlide 1s ease-in-out infinite;
+    }
+
+    @keyframes elasticSlide {
+      0% { left: -40%; width: 40%; }
+      50% { left: 30%; width: 60%; }
+      100% { left: 110%; width: 40%; }
+    }
+
+    /* 18 ── Hex Dots ── */
+    .loader-hex {
+      width: 30px;
+      height: 26px;
+      position: relative;
+    }
+
+    .loader-hex .h {
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--dot);
+      animation: hexPulse 1.6s ease-in-out infinite;
+    }
+
+    .loader-hex .h:nth-child(1) { top: 0;    left: 8px;  animation-delay: 0s; }
+    .loader-hex .h:nth-child(2) { top: 0;    left: 17px; animation-delay: 0.15s; }
+    .loader-hex .h:nth-child(3) { top: 10px; left: 22px; animation-delay: 0.3s; }
+    .loader-hex .h:nth-child(4) { top: 20px; left: 17px; animation-delay: 0.45s; }
+    .loader-hex .h:nth-child(5) { top: 20px; left: 8px;  animation-delay: 0.6s; }
+    .loader-hex .h:nth-child(6) { top: 10px; left: 3px;  animation-delay: 0.75s; }
+
+    @keyframes hexPulse {
+      0%, 60%, 100% { opacity: 0.1; transform: scale(0.7); }
+      30% { opacity: 1; transform: scale(1.2); }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="topbar">
+    <div class="topbar-left">
+      <a href="/" class="back-link">&larr; Back</a>
+      <span class="topbar-title">Loader Experiments<span class="topbar-subtitle">18 variations</span></span>
+    </div>
+    <div class="theme-toggle" id="themeToggle">
+      <button class="active" data-theme="light">Light</button>
+      <button data-theme="dark">Dark</button>
+    </div>
+  </nav>
+
+  <div class="grid">
+
+    <!-- 1 ── Dot Grid -->
+    <div class="card">
+      <div class="card-loader">
+        <div class="loader-dot-grid">
+          <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+          <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+          <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+        </div>
+      </div>
+      <span class="card-label">Dot Grid</span>
+      <span class="card-desc">3&times;3 sequential pulse</span>
+    </div>
+
+    <!-- 2 ── Ring Spinner -->
+    <div class="card">
+      <div class="card-loader">
+        <div class="loader-ring"></div>
+      </div>
+      <span class="card-label">Ring Spinner</span>
+      <span class="card-desc">Classic border rotation</span>
+    </div>
+
+    <!-- 3 ── Pulse Ring -->
+    <div class="card">
+      <div class="card-loader">
+        <div class="loader-pulse-ring"></div>
+      </div>
+      <span class="card-label">Pulse Ring</span>
+      <span class="card-desc">Expanding concentric rings</span>
+    </div>
+
+    <!-- 4 ── Bar Wave -->
+    <div class="card">
+      <div class="card-loader">
+        <div class="loader-bars">
+          <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+          <span class="bar"></span><span class="bar"></span>
+        </div>
+      </div>
+      <span class="card-label">Bar Wave</span>
+      <span class="card-desc">Staggered vertical bars</span>
+    </div>
+
+    <!-- 5 ── Orbit -->
+    <div class="card">
+      <div class="card-loader">
+        <div class="loader-orbit">
+          <span class="orb"></span><span class="orb"></span>
+          <span class="orb"></span><span class="orb"></span>
+        </div>
+      </div>
+      <span class="card-label">Orbit</span>
+      <span class="card-desc">Fading dots in rotation</span>
+    </div>
+
+    <!-- 6 ── Morphing Shape -->
+    <div class="card">
+      <div class="card-loader">
+        <div class="loader-morph"></div>
+      </div>
+      <span class="card-label">Morphing Shape</span>
+      <span class="card-desc">Circle-to-square transitions</span>
+    </div>
+
+    <!-- 7 ── Line Sweep -->
+    <div class="card">
+      <div class="card-loader">
+        <div class="loader-lines">
+          <span class="line"></span><span class="line"></span>
+          <span class="line"></span><span class="line"></span>
+        </div>
+      </div>
+      <span class="card-label">Line Sweep</span>
+      <span class="card-desc">Horizontal scale cascade</span>
+    </div>
+
+    <!-- 8 ── Bouncing Dots -->
+    <div class="card">
+      <div class="card-loader">
+        <div class="loader-bounce">
+          <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+        </div>
+      </div>
+      <span class="card-label">Bouncing Dots</span>
+      <span class="card-desc">Classic three-dot bounce</span>
+    </div>
+
+    <!-- 9 ── Square Cascade -->
+    <div class="card">
+      <div class="card-loader">
+        <div class="loader-squares">
+          <span class="sq"></span><span class="sq"></span>
+          <span class="sq"></span><span class="sq"></span>
+        </div>
+      </div>
+      <span class="card-label">Square Cascade</span>
+      <span class="card-desc">2&times;2 grid with stagger</span>
+    </div>
+
+    <!-- 10 ── Diamond Rotate -->
+    <div class="card">
+      <div class="card-loader">
+        <div class="loader-diamond">
+          <span class="d"></span><span class="d"></span>
+          <span class="d"></span><span class="d"></span>
+        </div>
+      </div>
+      <span class="card-label">Diamond Rotate</span>
+      <span class="card-desc">45&deg; rotated pulse</span>
+    </div>
+
+    <!-- 11 ── Cross Fade -->
+    <div class="card">
+      <div class="card-loader">
+        <div class="loader-cross">
+          <span class="arm h"></span>
+          <span class="arm v"></span>
+        </div>
+      </div>
+      <span class="card-label">Cross Fade</span>
+      <span class="card-desc">Alternating axis fade</span>
+    </div>
+
+    <!-- 12 ── Staggered Scale -->
+    <div class="card">
+      <div class="card-loader">
+        <div class="loader-stagger">
+          <span class="block"></span><span class="block"></span><span class="block"></span>
+          <span class="block"></span><span class="block"></span>
+        </div>
+      </div>
+      <span class="card-label">Staggered Scale</span>
+      <span class="card-desc">Rounded squares ripple</span>
+    </div>
+
+    <!-- 13 ── Breathing Circle -->
+    <div class="card">
+      <div class="card-loader">
+        <div class="loader-breathe"></div>
+      </div>
+      <span class="card-label">Breathing Circle</span>
+      <span class="card-desc">Smooth scale &amp; opacity</span>
+    </div>
+
+    <!-- 14 ── Dash Spinner -->
+    <div class="card">
+      <div class="card-loader">
+        <div class="loader-dash"></div>
+      </div>
+      <span class="card-label">Dash Spinner</span>
+      <span class="card-desc">Dual-ring counter-rotate</span>
+    </div>
+
+    <!-- 15 ── Flip Square -->
+    <div class="card">
+      <div class="card-loader">
+        <div class="loader-flip"></div>
+      </div>
+      <span class="card-label">Flip Square</span>
+      <span class="card-desc">3D perspective rotation</span>
+    </div>
+
+    <!-- 16 ── Dot Trail -->
+    <div class="card">
+      <div class="card-loader">
+        <div class="loader-trail">
+          <span class="t"></span><span class="t"></span><span class="t"></span>
+          <span class="t"></span><span class="t"></span>
+        </div>
+      </div>
+      <span class="card-label">Dot Trail</span>
+      <span class="card-desc">Fading size trail</span>
+    </div>
+
+    <!-- 17 ── Elastic Line -->
+    <div class="card">
+      <div class="card-loader">
+        <div class="loader-elastic"></div>
+      </div>
+      <span class="card-label">Elastic Line</span>
+      <span class="card-desc">Sliding progress bar</span>
+    </div>
+
+    <!-- 18 ── Hex Dots -->
+    <div class="card">
+      <div class="card-loader">
+        <div class="loader-hex">
+          <span class="h"></span><span class="h"></span><span class="h"></span>
+          <span class="h"></span><span class="h"></span><span class="h"></span>
+        </div>
+      </div>
+      <span class="card-label">Hex Dots</span>
+      <span class="card-desc">Hexagonal sequential pulse</span>
+    </div>
+
+  </div>
+
+  <script>
+    const toggle = document.getElementById('themeToggle');
+    const buttons = toggle.querySelectorAll('button');
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        buttons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.documentElement.setAttribute('data-theme', btn.dataset.theme);
+      });
+    });
+
+    // Respect system preference on load
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      buttons.forEach(b => b.classList.remove('active'));
+      toggle.querySelector('[data-theme="dark"]').classList.add('active');
+    }
+  </script>
+</body>
+</html>
