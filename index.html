@@ -1,1 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search Bar</title>
+  <style>
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 40%, #16213e 70%, #0f0f1a 100%);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      overflow: hidden;
+    }
+
+    /* Ambient background blobs */
+    body::before,
+    body::after {
+      content: '';
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.3;
+      z-index: 0;
+    }
+
+    body::before {
+      width: 400px;
+      height: 400px;
+      background: #6366f1;
+      top: -100px;
+      left: -100px;
+    }
+
+    body::after {
+      width: 350px;
+      height: 350px;
+      background: #8b5cf6;
+      bottom: -80px;
+      right: -80px;
+    }
+
+    .search-container {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .search-bar {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 24px;
+      width: 420px;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+    }
+
+    .search-bar:focus-within {
+      border-color: rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.08);
+      box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.3),
+        0 0 0 1px rgba(255, 255, 255, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    }
+
+    .search-bar.loading {
+      border-color: rgba(139, 92, 246, 0.25);
+    }
+
+    /* Search icon */
+    .search-icon {
+      flex-shrink: 0;
+      width: 18px;
+      height: 18px;
+      color: rgba(255, 255, 255, 0.4);
+      transition: color 0.3s ease;
+    }
+
+    .search-bar:focus-within .search-icon {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .search-bar.loading .search-icon {
+      display: none;
+    }
+
+    /* Dot grid loader */
+    .dot-grid {
+      flex-shrink: 0;
+      display: none;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      gap: 3px;
+      width: 18px;
+      height: 18px;
+    }
+
+    .search-bar.loading .dot-grid {
+      display: grid;
+    }
+
+    .dot-grid .dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: rgba(167, 139, 250, 0.7);
+      animation: dotPulse 1.4s ease-in-out infinite;
+    }
+
+    .dot-grid .dot:nth-child(1) { animation-delay: 0s; }
+    .dot-grid .dot:nth-child(2) { animation-delay: 0.1s; }
+    .dot-grid .dot:nth-child(3) { animation-delay: 0.2s; }
+    .dot-grid .dot:nth-child(4) { animation-delay: 0.3s; }
+    .dot-grid .dot:nth-child(5) { animation-delay: 0.4s; }
+    .dot-grid .dot:nth-child(6) { animation-delay: 0.5s; }
+    .dot-grid .dot:nth-child(7) { animation-delay: 0.6s; }
+    .dot-grid .dot:nth-child(8) { animation-delay: 0.7s; }
+    .dot-grid .dot:nth-child(9) { animation-delay: 0.8s; }
+
+    @keyframes dotPulse {
+      0%, 60%, 100% {
+        opacity: 0.2;
+        transform: scale(0.8);
+      }
+      30% {
+        opacity: 1;
+        transform: scale(1.1);
+      }
+    }
+
+    /* Input */
+    .search-input {
+      flex: 1;
+      border: none;
+      outline: none;
+      background: transparent;
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 15px;
+      font-weight: 400;
+      letter-spacing: 0.01em;
+    }
+
+    .search-input::placeholder {
+      color: rgba(255, 255, 255, 0.3);
+    }
+
+    /* Keyboard shortcut badge */
+    .shortcut-badge {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: rgba(255, 255, 255, 0.25);
+      font-size: 11px;
+      font-family: inherit;
+      line-height: 1;
+      transition: opacity 0.3s ease;
+    }
+
+    .search-bar.loading .shortcut-badge {
+      opacity: 0;
+    }
+
+    /* Toggle button */
+    .toggle-btn {
+      padding: 10px 24px;
+      border-radius: 9999px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 13px;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .toggle-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: rgba(255, 255, 255, 0.8);
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    /* Loading text animation */
+    .search-bar.loading .search-input::placeholder {
+      color: rgba(167, 139, 250, 0.5);
+    }
+  </style>
+</head>
+<body>
+  <div class="search-container">
+    <div class="search-bar" id="searchBar">
+      <!-- Search icon (visible when not loading) -->
+      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+
+      <!-- Dot grid loader (visible when loading) -->
+      <div class="dot-grid">
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      </div>
+
+      <input
+        type="text"
+        class="search-input"
+        id="searchInput"
+        placeholder="Search..."
+        autocomplete="off"
+        spellcheck="false"
+      />
+
+      <div class="shortcut-badge">
+        <span>/</span>
+      </div>
+    </div>
+
+    <button class="toggle-btn" id="toggleBtn">Toggle loading state</button>
+  </div>
+
+  <script>
+    const searchBar = document.getElementById('searchBar');
+    const searchInput = document.getElementById('searchInput');
+    const toggleBtn = document.getElementById('toggleBtn');
+
+    toggleBtn.addEventListener('click', () => {
+      searchBar.classList.toggle('loading');
+      if (searchBar.classList.contains('loading')) {
+        searchInput.placeholder = 'Searching...';
+        searchInput.disabled = true;
+      } else {
+        searchInput.placeholder = 'Search...';
+        searchInput.disabled = false;
+        searchInput.focus();
+      }
+    });
+
+    // Focus input on '/' key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === '/' && document.activeElement !== searchInput) {
+        e.preventDefault();
+        searchInput.focus();
+      }
+    });
+  </script>
+</body>
+</html>
