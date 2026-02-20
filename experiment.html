@@ -29,7 +29,6 @@
       --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
       --shadow-lg: 0 4px 12px rgba(0,0,0,0.08);
       --overlay: rgba(0,0,0,0.15);
-      --copied-bg: rgba(0,0,0,0.06);
     }
 
     [data-theme="dark"] {
@@ -47,7 +46,6 @@
       --shadow: 0 1px 3px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.2);
       --shadow-lg: 0 4px 12px rgba(0,0,0,0.4);
       --overlay: rgba(0,0,0,0.5);
-      --copied-bg: rgba(255,255,255,0.06);
     }
 
     body {
@@ -61,99 +59,49 @@
 
     /* ── Top bar ── */
     .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      position: sticky; top: 0; z-index: 20;
+      display: flex; align-items: center; justify-content: space-between;
       padding: 16px 32px;
       background: var(--surface);
       border-bottom: 1px solid var(--border);
       backdrop-filter: blur(12px);
       transition: background var(--transition), border-color var(--transition);
     }
-
     .topbar-left { display: flex; align-items: center; gap: 16px; }
-
-    .back-link {
-      font-size: 13px;
-      color: var(--text-tertiary);
-      text-decoration: none;
-      transition: color 0.15s;
-    }
+    .back-link { font-size: 13px; color: var(--text-tertiary); text-decoration: none; transition: color 0.15s; }
     .back-link:hover { color: var(--text-secondary); }
-
     .topbar-title { font-size: 14px; font-weight: 600; letter-spacing: -0.02em; }
     .topbar-subtitle { font-size: 12px; color: var(--text-tertiary); margin-left: 8px; font-weight: 400; }
 
     .theme-toggle {
-      display: flex;
-      background: var(--bg-subtle);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 3px;
+      display: flex; background: var(--bg-subtle); border: 1px solid var(--border);
+      border-radius: 8px; padding: 3px;
       transition: background var(--transition), border-color var(--transition);
     }
-
     .theme-toggle button {
-      padding: 6px 14px;
-      border: none;
-      border-radius: 6px;
-      background: transparent;
-      color: var(--text-tertiary);
-      font-size: 12px;
-      font-weight: 500;
-      font-family: var(--font);
-      cursor: pointer;
-      transition: all 0.15s ease;
-      line-height: 1;
+      padding: 6px 14px; border: none; border-radius: 6px; background: transparent;
+      color: var(--text-tertiary); font-size: 12px; font-weight: 500;
+      font-family: var(--font); cursor: pointer; transition: all 0.15s ease; line-height: 1;
     }
-
     .theme-toggle button.active {
-      background: var(--surface);
-      color: var(--text-primary);
-      box-shadow: var(--shadow);
+      background: var(--surface); color: var(--text-primary); box-shadow: var(--shadow);
     }
 
     /* ── Grid ── */
     .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 12px;
-      padding: 24px 32px;
-      max-width: 1200px;
-      margin: 0 auto;
-      transition: opacity 0.2s;
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 12px; padding: 24px 32px; max-width: 1200px; margin: 0 auto;
     }
 
     /* ── Card ── */
     .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 28px 20px 18px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 16px;
-      cursor: pointer;
-      transition: all var(--transition);
-      position: relative;
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 28px 20px 18px; display: flex; flex-direction: column; align-items: center;
+      gap: 16px; cursor: pointer; transition: all var(--transition); position: relative;
     }
-
-    .card:hover {
-      border-color: var(--text-tertiary);
-      box-shadow: var(--shadow-lg);
-    }
-
+    .card:hover { border-color: var(--text-tertiary); box-shadow: var(--shadow-lg); }
     .card:active { transform: scale(0.98); }
-
-    .card.active {
-      border-color: var(--text-primary);
-      box-shadow: var(--shadow-lg);
-    }
-
+    .card.active { border-color: var(--text-primary); box-shadow: var(--shadow-lg); }
     .card-loader { width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; }
     .card-label { font-size: 12px; font-weight: 600; color: var(--text-primary); letter-spacing: -0.01em; text-align: center; }
     .card-desc { font-size: 11px; color: var(--text-tertiary); text-align: center; line-height: 1.4; margin-top: -8px; }
@@ -162,171 +110,156 @@
 
     /* ── Panel Overlay ── */
     .panel-backdrop {
-      position: fixed;
-      inset: 0;
-      background: var(--overlay);
-      z-index: 30;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
+      position: fixed; inset: 0; background: var(--overlay); z-index: 30;
+      opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
     }
-
     .panel-backdrop.open { opacity: 1; pointer-events: auto; }
 
-    /* ── Side Panel ── */
+    /* ── Side Panel (Customizer) ── */
     .panel {
-      position: fixed;
-      top: 0;
-      right: 0;
-      width: 440px;
-      max-width: 90vw;
-      height: 100vh;
-      background: var(--surface);
-      border-left: 1px solid var(--border);
-      z-index: 40;
-      transform: translateX(100%);
-      transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
-      display: flex;
-      flex-direction: column;
+      position: fixed; top: 0; right: 0; width: 420px; max-width: 92vw; height: 100vh;
+      background: var(--surface); border-left: 1px solid var(--border); z-index: 40;
+      transform: translateX(100%); transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+      display: flex; flex-direction: column;
     }
-
     .panel.open { transform: translateX(0); }
 
     .panel-header {
-      padding: 20px 24px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      flex-shrink: 0;
+      padding: 20px 24px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: flex-start; justify-content: space-between; flex-shrink: 0;
     }
-
     .panel-header-text h2 { font-size: 15px; font-weight: 600; letter-spacing: -0.02em; }
     .panel-header-text p { font-size: 12px; color: var(--text-tertiary); margin-top: 4px; }
 
     .panel-close {
-      width: 28px;
-      height: 28px;
-      border-radius: 6px;
-      border: 1px solid var(--border);
-      background: var(--surface);
-      color: var(--text-tertiary);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: all 0.15s;
-      flex-shrink: 0;
+      width: 28px; height: 28px; border-radius: 6px; border: 1px solid var(--border);
+      background: var(--surface); color: var(--text-tertiary);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: all 0.15s; flex-shrink: 0;
     }
-
     .panel-close:hover { background: var(--surface-hover); color: var(--text-primary); }
 
-    .panel-list {
-      flex: 1;
-      overflow-y: auto;
-      padding: 8px 0;
+    /* ── Preview Area ── */
+    .preview-area {
+      display: flex; align-items: center; justify-content: center;
+      padding: 36px 24px; border-bottom: 1px solid var(--border); flex-shrink: 0;
+    }
+    .preview-box {
+      width: 120px; height: 120px; border-radius: 14px;
+      background: var(--bg-subtle); border: 1px solid var(--border-subtle);
+      display: flex; align-items: center; justify-content: center;
+      transition: background var(--transition), border-color var(--transition);
+    }
+    .preview-grid { display: grid; place-items: center; }
+    .preview-grid span { background: var(--dot); }
+
+    /* ── Panel Body (scrollable controls) ── */
+    .panel-body {
+      flex: 1; overflow-y: auto; padding: 20px 24px;
+      display: flex; flex-direction: column; gap: 20px;
+    }
+    .panel-body::-webkit-scrollbar { width: 6px; }
+    .panel-body::-webkit-scrollbar-track { background: transparent; }
+    .panel-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+    /* ── Controls ── */
+    .control-group {}
+    .control-label {
+      font-size: 10px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.06em; color: var(--text-tertiary); margin-bottom: 8px; display: block;
+    }
+    .control-row { display: flex; align-items: center; gap: 12px; }
+    .control-value {
+      font-size: 12px; font-weight: 600; color: var(--text-secondary);
+      min-width: 36px; text-align: right; font-variant-numeric: tabular-nums;
     }
 
-    .panel-list::-webkit-scrollbar { width: 6px; }
-    .panel-list::-webkit-scrollbar-track { background: transparent; }
-    .panel-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-
-    /* ── Panel Item ── */
-    .panel-item {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding: 14px 24px;
-      cursor: pointer;
-      transition: background 0.15s;
-      border-bottom: 1px solid var(--border-subtle);
-      position: relative;
+    /* ── Range Slider ── */
+    .slider {
+      -webkit-appearance: none; appearance: none;
+      width: 100%; height: 4px; background: var(--border);
+      border-radius: 2px; outline: none; cursor: pointer;
+    }
+    .slider::-webkit-slider-thumb {
+      -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%;
+      background: var(--text-primary); cursor: pointer;
+      border: 2px solid var(--surface); box-shadow: var(--shadow);
+    }
+    .slider::-moz-range-thumb {
+      width: 16px; height: 16px; border-radius: 50%;
+      background: var(--text-primary); cursor: pointer;
+      border: 2px solid var(--surface); box-shadow: var(--shadow);
     }
 
-    .panel-item:last-child { border-bottom: none; }
-    .panel-item:hover { background: var(--surface-hover); }
+    /* ── Segmented Buttons ── */
+    .seg-group {
+      display: flex; gap: 0; background: var(--bg-subtle);
+      border: 1px solid var(--border); border-radius: 8px; padding: 3px;
+    }
+    .seg-btn {
+      flex: 1; padding: 7px 10px; border: none; border-radius: 6px;
+      background: transparent; color: var(--text-tertiary);
+      font-size: 12px; font-weight: 500; font-family: var(--font);
+      cursor: pointer; transition: all 0.15s; line-height: 1; white-space: nowrap;
+    }
+    .seg-btn.active {
+      background: var(--surface); color: var(--text-primary); box-shadow: var(--shadow);
+    }
+    .seg-btn:hover:not(.active) { color: var(--text-secondary); }
 
-    .panel-item.copied {
-      background: var(--copied-bg);
+    /* ── Pattern Thumbnails ── */
+    .pattern-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+    .pattern-thumb {
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      padding: 10px 4px 8px; border: 1px solid var(--border); border-radius: 8px;
+      cursor: pointer; transition: all 0.15s;
+    }
+    .pattern-thumb:hover { background: var(--surface-hover); }
+    .pattern-thumb.active { border-color: var(--text-primary); background: var(--bg-subtle); }
+    .thumb-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 2px; width: 18px; height: 18px;
+    }
+    .thumb-grid span {
+      width: 4px; height: 4px; border-radius: 50%; background: var(--dot);
+    }
+    .thumb-name {
+      font-size: 9px; font-weight: 500; color: var(--text-secondary); text-align: center;
+      line-height: 1.1;
     }
 
-    .panel-item-preview {
-      width: 40px;
-      height: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 8px;
-      background: var(--bg-subtle);
-      border: 1px solid var(--border-subtle);
-      flex-shrink: 0;
+    /* ── Panel Footer ── */
+    .panel-footer {
+      padding: 16px 24px; border-top: 1px solid var(--border); flex-shrink: 0;
     }
-
-    .panel-item-text { flex: 1; min-width: 0; }
-
-    .panel-item-category {
-      font-size: 10px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--text-tertiary);
-      line-height: 1;
+    .copy-btn {
+      width: 100%; padding: 11px 16px; border-radius: 8px; border: none;
+      background: var(--text-primary); color: var(--bg);
+      font-size: 13px; font-weight: 600; font-family: var(--font);
+      cursor: pointer; transition: all 0.15s; display: flex;
+      align-items: center; justify-content: center; gap: 8px;
     }
-
-    .panel-item-name {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-primary);
-      margin-top: 3px;
-      letter-spacing: -0.01em;
-    }
-
-    .panel-item-desc {
-      font-size: 11px;
-      color: var(--text-tertiary);
-      margin-top: 2px;
-    }
-
-    .panel-item-copy {
-      flex-shrink: 0;
-      color: var(--text-tertiary);
-      opacity: 0;
-      transition: opacity 0.15s;
-    }
-
-    .panel-item:hover .panel-item-copy { opacity: 1; }
-    .panel-item.copied .panel-item-copy { opacity: 1; color: var(--text-primary); }
+    .copy-btn:hover { opacity: 0.85; }
+    .copy-btn:active { opacity: 0.7; transform: scale(0.98); }
+    .copy-btn.copied { opacity: 0.6; }
 
     /* ── Toast ── */
     .toast {
-      position: fixed;
-      bottom: 24px;
-      left: 50%;
+      position: fixed; bottom: 24px; left: 50%;
       transform: translateX(-50%) translateY(80px);
-      background: var(--text-primary);
-      color: var(--bg);
-      padding: 10px 20px;
-      border-radius: 10px;
-      font-size: 13px;
-      font-weight: 500;
-      font-family: var(--font);
-      z-index: 100;
-      opacity: 0;
+      background: var(--text-primary); color: var(--bg);
+      padding: 10px 20px; border-radius: 10px;
+      font-size: 13px; font-weight: 500; font-family: var(--font);
+      z-index: 100; opacity: 0;
       transition: all 0.3s cubic-bezier(0.32, 0.72, 0, 1);
-      pointer-events: none;
-      white-space: nowrap;
+      pointer-events: none; white-space: nowrap;
     }
-
-    .toast.show {
-      transform: translateX(-50%) translateY(0);
-      opacity: 1;
-    }
+    .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
     /* ─────────────────────────────────────
        MAIN LOADER STYLES (18 types)
     ───────────────────────────────────── */
 
-    /* 1 ── Dot Grid ── */
     .loader-dot-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; width: 28px; height: 28px; }
     .loader-dot-grid .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--dot); animation: dotGridPulse 1.4s ease-in-out infinite; }
     .loader-dot-grid .dot:nth-child(1) { animation-delay: 0s; }
@@ -340,17 +273,14 @@
     .loader-dot-grid .dot:nth-child(9) { animation-delay: 0.8s; }
     @keyframes dotGridPulse { 0%, 60%, 100% { opacity: 0.12; transform: scale(0.8); } 30% { opacity: 1; transform: scale(1.1); } }
 
-    /* 2 ── Ring Spinner ── */
     .loader-ring { width: 28px; height: 28px; border: 2.5px solid var(--dot-muted); border-top-color: var(--dot); border-radius: 50%; animation: ringRotate 0.8s linear infinite; }
     @keyframes ringRotate { to { transform: rotate(360deg); } }
 
-    /* 3 ── Pulse Ring ── */
     .loader-pulse-ring { width: 24px; height: 24px; position: relative; }
     .loader-pulse-ring::before, .loader-pulse-ring::after { content: ''; position: absolute; inset: 0; border: 2px solid var(--dot); border-radius: 50%; animation: pulseRingExpand 1.6s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
     .loader-pulse-ring::after { animation-delay: 0.6s; }
     @keyframes pulseRingExpand { 0% { transform: scale(0.5); opacity: 1; } 100% { transform: scale(1.6); opacity: 0; } }
 
-    /* 4 ── Bar Wave ── */
     .loader-bars { display: flex; align-items: center; gap: 3px; height: 28px; }
     .loader-bars .bar { width: 3px; height: 8px; border-radius: 2px; background: var(--dot); animation: barWave 1s ease-in-out infinite; }
     .loader-bars .bar:nth-child(1) { animation-delay: 0s; }
@@ -360,7 +290,6 @@
     .loader-bars .bar:nth-child(5) { animation-delay: 0.4s; }
     @keyframes barWave { 0%, 100% { height: 8px; opacity: 0.3; } 50% { height: 24px; opacity: 1; } }
 
-    /* 5 ── Orbit ── */
     .loader-orbit { width: 28px; height: 28px; position: relative; animation: orbitRotate 1.5s linear infinite; }
     .loader-orbit .orb { position: absolute; width: 6px; height: 6px; border-radius: 50%; background: var(--dot); }
     .loader-orbit .orb:nth-child(1) { top: 0; left: 50%; transform: translateX(-50%); opacity: 1; }
@@ -369,11 +298,9 @@
     .loader-orbit .orb:nth-child(4) { top: 50%; left: 0; transform: translateY(-50%); opacity: 0.15; }
     @keyframes orbitRotate { to { transform: rotate(360deg); } }
 
-    /* 6 ── Morphing Shape ── */
     .loader-morph { width: 24px; height: 24px; background: var(--dot); animation: morph 2s ease-in-out infinite; }
     @keyframes morph { 0%, 100% { border-radius: 50%; transform: rotate(0deg) scale(1); } 25% { border-radius: 4px; transform: rotate(90deg) scale(0.85); } 50% { border-radius: 50% 4px; transform: rotate(180deg) scale(1); } 75% { border-radius: 4px 50%; transform: rotate(270deg) scale(0.85); } }
 
-    /* 7 ── Line Sweep ── */
     .loader-lines { display: flex; flex-direction: column; gap: 4px; width: 28px; }
     .loader-lines .line { height: 2.5px; border-radius: 2px; background: var(--dot); animation: lineSweep 1.2s ease-in-out infinite; transform-origin: left center; }
     .loader-lines .line:nth-child(1) { animation-delay: 0s; }
@@ -382,7 +309,6 @@
     .loader-lines .line:nth-child(4) { animation-delay: 0.45s; }
     @keyframes lineSweep { 0%, 100% { transform: scaleX(0.3); opacity: 0.2; } 50% { transform: scaleX(1); opacity: 1; } }
 
-    /* 8 ── Bouncing Dots ── */
     .loader-bounce { display: flex; align-items: center; gap: 5px; }
     .loader-bounce .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--dot); animation: bounce 1.2s ease-in-out infinite; }
     .loader-bounce .dot:nth-child(1) { animation-delay: 0s; }
@@ -390,7 +316,6 @@
     .loader-bounce .dot:nth-child(3) { animation-delay: 0.3s; }
     @keyframes bounce { 0%, 80%, 100% { transform: translateY(0); opacity: 0.3; } 40% { transform: translateY(-10px); opacity: 1; } }
 
-    /* 9 ── Square Cascade ── */
     .loader-squares { display: grid; grid-template-columns: repeat(2, 1fr); gap: 3px; width: 23px; height: 23px; }
     .loader-squares .sq { width: 10px; height: 10px; border-radius: 2px; background: var(--dot); animation: squareCascade 1.6s ease-in-out infinite; }
     .loader-squares .sq:nth-child(1) { animation-delay: 0s; }
@@ -399,7 +324,6 @@
     .loader-squares .sq:nth-child(4) { animation-delay: 0.4s; }
     @keyframes squareCascade { 0%, 70%, 100% { opacity: 0.1; transform: scale(0.85); } 35% { opacity: 1; transform: scale(1); } }
 
-    /* 10 ── Diamond Rotate ── */
     .loader-diamond { width: 20px; height: 20px; position: relative; }
     .loader-diamond .d { position: absolute; width: 8px; height: 8px; background: var(--dot); transform: rotate(45deg); border-radius: 1.5px; animation: diamondPulse 1.4s ease-in-out infinite; }
     .loader-diamond .d:nth-child(1) { top: 0; left: 6px; animation-delay: 0s; }
@@ -408,14 +332,12 @@
     .loader-diamond .d:nth-child(4) { top: 6px; left: 0; animation-delay: 0.6s; }
     @keyframes diamondPulse { 0%, 70%, 100% { opacity: 0.1; transform: rotate(45deg) scale(0.7); } 35% { opacity: 1; transform: rotate(45deg) scale(1); } }
 
-    /* 11 ── Cross Fade ── */
     .loader-cross { width: 24px; height: 24px; position: relative; }
     .loader-cross .arm { position: absolute; background: var(--dot); border-radius: 2px; animation: crossFade 1.2s ease-in-out infinite; }
     .loader-cross .arm.h { width: 24px; height: 3px; top: 50%; left: 0; transform: translateY(-50%); }
     .loader-cross .arm.v { width: 3px; height: 24px; left: 50%; top: 0; transform: translateX(-50%); animation-delay: 0.6s; }
     @keyframes crossFade { 0%, 100% { opacity: 0.15; } 50% { opacity: 1; } }
 
-    /* 12 ── Staggered Scale ── */
     .loader-stagger { display: flex; align-items: center; gap: 4px; }
     .loader-stagger .block { width: 6px; height: 6px; border-radius: 1.5px; background: var(--dot); animation: staggerScale 1.2s ease-in-out infinite; }
     .loader-stagger .block:nth-child(1) { animation-delay: 0s; }
@@ -425,22 +347,18 @@
     .loader-stagger .block:nth-child(5) { animation-delay: 0.48s; }
     @keyframes staggerScale { 0%, 60%, 100% { transform: scale(0.6); opacity: 0.15; } 30% { transform: scale(1.3); opacity: 1; } }
 
-    /* 13 ── Breathing Circle ── */
     .loader-breathe { width: 22px; height: 22px; border-radius: 50%; background: var(--dot); animation: breatheMain 2s ease-in-out infinite; }
     @keyframes breatheMain { 0%, 100% { transform: scale(0.6); opacity: 0.2; } 50% { transform: scale(1); opacity: 0.8; } }
 
-    /* 14 ── Dash Spinner ── */
     .loader-dash { width: 26px; height: 26px; border: 2.5px solid transparent; border-radius: 50%; position: relative; animation: dashSpin 1s linear infinite; }
     .loader-dash::before { content: ''; position: absolute; inset: -2.5px; border: 2.5px solid transparent; border-top-color: var(--dot); border-right-color: var(--dot); border-radius: 50%; opacity: 0.8; }
     .loader-dash::after { content: ''; position: absolute; inset: 3px; border: 2px solid transparent; border-bottom-color: var(--dot); border-radius: 50%; opacity: 0.3; animation: dashSpinReverse 0.6s linear infinite; }
     @keyframes dashSpin { to { transform: rotate(360deg); } }
     @keyframes dashSpinReverse { to { transform: rotate(-360deg); } }
 
-    /* 15 ── Flip Square ── */
     .loader-flip { width: 22px; height: 22px; background: var(--dot); border-radius: 3px; animation: flipSquare 1.6s ease-in-out infinite; }
     @keyframes flipSquare { 0% { transform: perspective(200px) rotateX(0deg) rotateY(0deg); } 25% { transform: perspective(200px) rotateX(180deg) rotateY(0deg); } 50% { transform: perspective(200px) rotateX(180deg) rotateY(180deg); } 75% { transform: perspective(200px) rotateX(0deg) rotateY(180deg); } 100% { transform: perspective(200px) rotateX(0deg) rotateY(360deg); } }
 
-    /* 16 ── Dot Trail ── */
     .loader-trail { width: 28px; height: 28px; position: relative; animation: trailRotate 1.8s linear infinite; }
     .loader-trail .t { position: absolute; width: 5px; height: 5px; border-radius: 50%; background: var(--dot); }
     .loader-trail .t:nth-child(1) { top: 0; left: 50%; transform: translateX(-50%); opacity: 1; }
@@ -450,12 +368,10 @@
     .loader-trail .t:nth-child(5) { bottom: 0; left: 50%; transform: translateX(-50%); opacity: 0.15; width: 3px; height: 3px; }
     @keyframes trailRotate { to { transform: rotate(360deg); } }
 
-    /* 17 ── Elastic Line ── */
     .loader-elastic { width: 32px; height: 3px; background: var(--dot-muted); border-radius: 2px; position: relative; overflow: hidden; }
     .loader-elastic::before { content: ''; position: absolute; top: 0; left: -40%; width: 40%; height: 100%; background: var(--dot); border-radius: 2px; animation: elasticSlide 1s ease-in-out infinite; }
     @keyframes elasticSlide { 0% { left: -40%; width: 40%; } 50% { left: 30%; width: 60%; } 100% { left: 110%; width: 40%; } }
 
-    /* 18 ── Hex Dots ── */
     .loader-hex { width: 30px; height: 26px; position: relative; }
     .loader-hex .h { position: absolute; width: 5px; height: 5px; border-radius: 50%; background: var(--dot); animation: hexPulse 1.6s ease-in-out infinite; }
     .loader-hex .h:nth-child(1) { top: 0; left: 8px; animation-delay: 0s; }
@@ -466,45 +382,11 @@
     .loader-hex .h:nth-child(6) { top: 10px; left: 3px; animation-delay: 0.75s; }
     @keyframes hexPulse { 0%, 60%, 100% { opacity: 0.1; transform: scale(0.7); } 30% { opacity: 1; transform: scale(1.2); } }
 
-    /* ─────────────────────────────────────
-       PANEL VARIATION KEYFRAMES
-    ───────────────────────────────────── */
-    @keyframes vPulse {
-      0%, 60%, 100% { opacity: 0.12; transform: scale(0.8); }
-      30% { opacity: 1; transform: scale(1.1); }
-    }
-    @keyframes vBlink {
-      0%, 100% { opacity: 0.08; }
-      40%, 60% { opacity: 1; }
-    }
-    @keyframes vBreathe {
-      0%, 100% { transform: scale(0.5); opacity: 0.12; }
-      50% { transform: scale(1); opacity: 0.9; }
-    }
-    @keyframes vGrow {
-      0%, 70%, 100% { transform: scale(0); opacity: 0; }
-      35% { transform: scale(1.15); opacity: 1; }
-    }
-
-    /* Variation grid base */
-    .v-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 3px;
-      width: 22px;
-      height: 22px;
-    }
-
-    .v-grid span {
-      width: 5px;
-      height: 5px;
-      background: var(--dot);
-    }
-
-    .v-grid.shape-circle span { border-radius: 50%; }
-    .v-grid.shape-square span { border-radius: 1.5px; }
-    .v-grid.shape-diamond span { border-radius: 1px; rotate: 45deg; }
-    .v-grid.shape-bar span { border-radius: 1px; width: 3px; height: 7px; justify-self: center; }
+    /* ── Panel animation keyframes ── */
+    @keyframes vPulse { 0%, 60%, 100% { opacity: 0.12; transform: scale(0.8); } 30% { opacity: 1; transform: scale(1.1); } }
+    @keyframes vBlink { 0%, 100% { opacity: 0.08; } 40%, 60% { opacity: 1; } }
+    @keyframes vBreathe { 0%, 100% { transform: scale(0.5); opacity: 0.12; } 50% { transform: scale(1); opacity: 0.9; } }
+    @keyframes vGrow { 0%, 70%, 100% { transform: scale(0); opacity: 0; } 35% { transform: scale(1.15); opacity: 1; } }
   </style>
 </head>
 <body>
@@ -512,7 +394,7 @@
   <nav class="topbar">
     <div class="topbar-left">
       <a href="/" class="back-link">&larr; Back</a>
-      <span class="topbar-title">Loader Experiments<span class="topbar-subtitle">18 variations &middot; click to copy</span></span>
+      <span class="topbar-title">Loader Experiments<span class="topbar-subtitle">18 loaders &middot; click to copy</span></span>
     </div>
     <div class="theme-toggle" id="themeToggle">
       <button class="active" data-theme="light">Light</button>
@@ -521,8 +403,6 @@
   </nav>
 
   <div class="grid" id="grid">
-
-    <!-- 1 ── Dot Grid (opens panel) -->
     <div class="card" data-loader="dot-grid">
       <div class="card-loader">
         <div class="loader-dot-grid">
@@ -533,26 +413,20 @@
       </div>
       <span class="card-label">Dot Grid</span>
       <span class="card-desc">3&times;3 sequential pulse</span>
-      <span class="card-hint">16 variations &rarr;</span>
+      <span class="card-hint">customize &rarr;</span>
     </div>
-
-    <!-- 2 ── Ring Spinner -->
     <div class="card" data-loader="ring">
       <div class="card-loader"><div class="loader-ring"></div></div>
       <span class="card-label">Ring Spinner</span>
       <span class="card-desc">Classic border rotation</span>
       <span class="card-hint">click to copy</span>
     </div>
-
-    <!-- 3 ── Pulse Ring -->
     <div class="card" data-loader="pulse-ring">
       <div class="card-loader"><div class="loader-pulse-ring"></div></div>
       <span class="card-label">Pulse Ring</span>
       <span class="card-desc">Expanding concentric rings</span>
       <span class="card-hint">click to copy</span>
     </div>
-
-    <!-- 4 ── Bar Wave -->
     <div class="card" data-loader="bars">
       <div class="card-loader">
         <div class="loader-bars"><span class="bar"></span><span class="bar"></span><span class="bar"></span><span class="bar"></span><span class="bar"></span></div>
@@ -561,8 +435,6 @@
       <span class="card-desc">Staggered vertical bars</span>
       <span class="card-hint">click to copy</span>
     </div>
-
-    <!-- 5 ── Orbit -->
     <div class="card" data-loader="orbit">
       <div class="card-loader">
         <div class="loader-orbit"><span class="orb"></span><span class="orb"></span><span class="orb"></span><span class="orb"></span></div>
@@ -571,16 +443,12 @@
       <span class="card-desc">Fading dots in rotation</span>
       <span class="card-hint">click to copy</span>
     </div>
-
-    <!-- 6 ── Morphing Shape -->
     <div class="card" data-loader="morph">
       <div class="card-loader"><div class="loader-morph"></div></div>
       <span class="card-label">Morphing Shape</span>
       <span class="card-desc">Circle-to-square transitions</span>
       <span class="card-hint">click to copy</span>
     </div>
-
-    <!-- 7 ── Line Sweep -->
     <div class="card" data-loader="lines">
       <div class="card-loader">
         <div class="loader-lines"><span class="line"></span><span class="line"></span><span class="line"></span><span class="line"></span></div>
@@ -589,8 +457,6 @@
       <span class="card-desc">Horizontal scale cascade</span>
       <span class="card-hint">click to copy</span>
     </div>
-
-    <!-- 8 ── Bouncing Dots -->
     <div class="card" data-loader="bounce-dots">
       <div class="card-loader">
         <div class="loader-bounce"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
@@ -599,8 +465,6 @@
       <span class="card-desc">Classic three-dot bounce</span>
       <span class="card-hint">click to copy</span>
     </div>
-
-    <!-- 9 ── Square Cascade -->
     <div class="card" data-loader="squares">
       <div class="card-loader">
         <div class="loader-squares"><span class="sq"></span><span class="sq"></span><span class="sq"></span><span class="sq"></span></div>
@@ -609,8 +473,6 @@
       <span class="card-desc">2&times;2 grid with stagger</span>
       <span class="card-hint">click to copy</span>
     </div>
-
-    <!-- 10 ── Diamond Rotate -->
     <div class="card" data-loader="diamond">
       <div class="card-loader">
         <div class="loader-diamond"><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span></div>
@@ -619,8 +481,6 @@
       <span class="card-desc">45&deg; rotated pulse</span>
       <span class="card-hint">click to copy</span>
     </div>
-
-    <!-- 11 ── Cross Fade -->
     <div class="card" data-loader="cross">
       <div class="card-loader">
         <div class="loader-cross"><span class="arm h"></span><span class="arm v"></span></div>
@@ -629,8 +489,6 @@
       <span class="card-desc">Alternating axis fade</span>
       <span class="card-hint">click to copy</span>
     </div>
-
-    <!-- 12 ── Staggered Scale -->
     <div class="card" data-loader="stagger">
       <div class="card-loader">
         <div class="loader-stagger"><span class="block"></span><span class="block"></span><span class="block"></span><span class="block"></span><span class="block"></span></div>
@@ -639,32 +497,24 @@
       <span class="card-desc">Rounded squares ripple</span>
       <span class="card-hint">click to copy</span>
     </div>
-
-    <!-- 13 ── Breathing Circle -->
     <div class="card" data-loader="breathe-circle">
       <div class="card-loader"><div class="loader-breathe"></div></div>
       <span class="card-label">Breathing Circle</span>
       <span class="card-desc">Smooth scale &amp; opacity</span>
       <span class="card-hint">click to copy</span>
     </div>
-
-    <!-- 14 ── Dash Spinner -->
     <div class="card" data-loader="dash">
       <div class="card-loader"><div class="loader-dash"></div></div>
       <span class="card-label">Dash Spinner</span>
       <span class="card-desc">Dual-ring counter-rotate</span>
       <span class="card-hint">click to copy</span>
     </div>
-
-    <!-- 15 ── Flip Square -->
     <div class="card" data-loader="flip">
       <div class="card-loader"><div class="loader-flip"></div></div>
       <span class="card-label">Flip Square</span>
       <span class="card-desc">3D perspective rotation</span>
       <span class="card-hint">click to copy</span>
     </div>
-
-    <!-- 16 ── Dot Trail -->
     <div class="card" data-loader="trail">
       <div class="card-loader">
         <div class="loader-trail"><span class="t"></span><span class="t"></span><span class="t"></span><span class="t"></span><span class="t"></span></div>
@@ -673,16 +523,12 @@
       <span class="card-desc">Fading size trail</span>
       <span class="card-hint">click to copy</span>
     </div>
-
-    <!-- 17 ── Elastic Line -->
     <div class="card" data-loader="elastic">
       <div class="card-loader"><div class="loader-elastic"></div></div>
       <span class="card-label">Elastic Line</span>
       <span class="card-desc">Sliding progress bar</span>
       <span class="card-hint">click to copy</span>
     </div>
-
-    <!-- 18 ── Hex Dots -->
     <div class="card" data-loader="hex">
       <div class="card-loader">
         <div class="loader-hex"><span class="h"></span><span class="h"></span><span class="h"></span><span class="h"></span><span class="h"></span><span class="h"></span></div>
@@ -691,515 +537,374 @@
       <span class="card-desc">Hexagonal sequential pulse</span>
       <span class="card-hint">click to copy</span>
     </div>
-
   </div>
 
-  <!-- Panel backdrop -->
   <div class="panel-backdrop" id="backdrop"></div>
 
-  <!-- Side panel -->
   <div class="panel" id="panel">
     <div class="panel-header">
       <div class="panel-header-text">
-        <h2>Dot Grid Variations</h2>
-        <p>Click any variation to copy its snippet</p>
+        <h2>Dot Grid</h2>
+        <p>Customize & copy</p>
       </div>
       <button class="panel-close" id="panelClose">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
     </div>
-    <div class="panel-list" id="panelList"></div>
+
+    <div class="preview-area">
+      <div class="preview-box">
+        <div class="preview-grid" id="preview"></div>
+      </div>
+    </div>
+
+    <div class="panel-body">
+      <div class="control-group">
+        <label class="control-label">Size</label>
+        <div class="control-row">
+          <input type="range" class="slider" min="20" max="80" value="28" id="sizeSlider">
+          <span class="control-value" id="sizeValue">28px</span>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label">Grid</label>
+        <div class="seg-group" id="gridSeg">
+          <button class="seg-btn active" data-val="3">3&times;3</button>
+          <button class="seg-btn" data-val="4">4&times;4</button>
+          <button class="seg-btn" data-val="5">5&times;5</button>
+          <button class="seg-btn" data-val="7">7&times;7</button>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label">Shape</label>
+        <div class="seg-group" id="shapeSeg">
+          <button class="seg-btn active" data-val="circle">Circle</button>
+          <button class="seg-btn" data-val="square">Square</button>
+          <button class="seg-btn" data-val="diamond">Diamond</button>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label">Pattern</label>
+        <div class="pattern-grid" id="patternGrid"></div>
+      </div>
+    </div>
+
+    <div class="panel-footer">
+      <button class="copy-btn" id="copyBtn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+        Copy Snippet
+      </button>
+    </div>
   </div>
 
-  <!-- Toast -->
   <div class="toast" id="toast">Copied to clipboard</div>
 
   <script>
-    /* ─── Dot Grid Variations Data ─── */
-    const variations = [
-      { id:'sequential', name:'Sequential', desc:'Linear 1 to 9 pulse', cat:'Circle',
-        shape:'circle', delays:[0,.1,.2,.3,.4,.5,.6,.7,.8], kf:'vPulse', dur:1.4 },
-      { id:'spiral', name:'Spiral', desc:'Outside-in spiral path', cat:'Circle',
-        shape:'circle', delays:[0,.1,.2,.7,.8,.3,.6,.5,.4], kf:'vPulse', dur:1.4 },
-      { id:'snake', name:'Snake', desc:'Zigzag S-shaped path', cat:'Circle',
-        shape:'circle', delays:[0,.1,.2,.5,.4,.3,.6,.7,.8], kf:'vPulse', dur:1.4 },
-      { id:'rows', name:'Wave Rows', desc:'Row-by-row cascade', cat:'Circle',
-        shape:'circle', delays:[0,0,0,.25,.25,.25,.5,.5,.5], kf:'vPulse', dur:1.4 },
-      { id:'cols', name:'Wave Columns', desc:'Column-by-column wave', cat:'Circle',
-        shape:'circle', delays:[0,.25,.5,0,.25,.5,0,.25,.5], kf:'vPulse', dur:1.4 },
-      { id:'center', name:'Center Ripple', desc:'Radiates outward from center', cat:'Circle',
-        shape:'circle', delays:[.4,.2,.4,.2,0,.2,.4,.2,.4], kf:'vPulse', dur:1.4 },
-      { id:'diagonal', name:'Diagonal', desc:'Top-left to bottom-right', cat:'Circle',
-        shape:'circle', delays:[0,.15,.3,.15,.3,.45,.3,.45,.6], kf:'vPulse', dur:1.4 },
-      { id:'checker', name:'Checkerboard', desc:'Alternating on/off cells', cat:'Circle',
-        shape:'circle', delays:[0,.5,0,.5,0,.5,0,.5,0], kf:'vBlink', dur:1.2 },
-      { id:'cross', name:'Cross First', desc:'Plus sign then corners', cat:'Circle',
-        shape:'circle', delays:[.35,0,.35,0,0,0,.35,0,.35], kf:'vPulse', dur:1.4 },
-      { id:'ping', name:'Ping Pong', desc:'Left-right bouncing wave', cat:'Circle',
-        shape:'circle', delays:[0,.2,.4,.4,.2,0,0,.2,.4], kf:'vPulse', dur:1.2 },
-      { id:'breathe', name:'Breathe', desc:'All dots pulse in unison', cat:'Circle',
-        shape:'circle', delays:[0,0,0,0,0,0,0,0,0], kf:'vBreathe', dur:2 },
-      { id:'reverse', name:'Reverse', desc:'Bottom-right to top-left', cat:'Circle',
-        shape:'circle', delays:[.8,.7,.6,.5,.4,.3,.2,.1,0], kf:'vPulse', dur:1.4 },
-      { id:'sq-seq', name:'Square Sequential', desc:'Square dots, linear pulse', cat:'Square',
-        shape:'square', delays:[0,.1,.2,.3,.4,.5,.6,.7,.8], kf:'vPulse', dur:1.4 },
-      { id:'sq-center', name:'Square Ripple', desc:'Squares ripple from center', cat:'Square',
-        shape:'square', delays:[.4,.2,.4,.2,0,.2,.4,.2,.4], kf:'vGrow', dur:1.4 },
-      { id:'dia-seq', name:'Diamond Sequential', desc:'Diamond-shaped dots', cat:'Diamond',
-        shape:'diamond', delays:[0,.1,.2,.3,.4,.5,.6,.7,.8], kf:'vPulse', dur:1.4 },
-      { id:'dia-center', name:'Diamond Ripple', desc:'Diamonds from center out', cat:'Diamond',
-        shape:'diamond', delays:[.4,.2,.4,.2,0,.2,.4,.2,.4], kf:'vPulse', dur:1.4 },
-    ];
+    /* ═══════════════════════════════════════
+       STATE
+    ═══════════════════════════════════════ */
+    const state = { size: 28, grid: 3, shape: 'circle', pattern: 'sequential' };
 
-    /* ─── Keyframe CSS for snippets ─── */
-    const kfSnippets = {
-      vPulse: `@keyframes vPulse {\n  0%, 60%, 100% { opacity: 0.12; transform: scale(0.8); }\n  30% { opacity: 1; transform: scale(1.1); }\n}`,
-      vBlink: `@keyframes vBlink {\n  0%, 100% { opacity: 0.08; }\n  40%, 60% { opacity: 1; }\n}`,
-      vBreathe: `@keyframes vBreathe {\n  0%, 100% { transform: scale(0.5); opacity: 0.12; }\n  50% { transform: scale(1); opacity: 0.9; }\n}`,
-      vGrow: `@keyframes vGrow {\n  0%, 70%, 100% { transform: scale(0); opacity: 0; }\n  35% { transform: scale(1.15); opacity: 1; }\n}`,
+    /* ═══════════════════════════════════════
+       PATTERN DEFINITIONS
+    ═══════════════════════════════════════ */
+    const patterns = {
+      sequential: { name: 'Sequential', kf: 'vPulse', dur: 1.4 },
+      spiral:     { name: 'Spiral',     kf: 'vPulse', dur: 1.4 },
+      snake:      { name: 'Snake',      kf: 'vPulse', dur: 1.4 },
+      rows:       { name: 'Rows',       kf: 'vPulse', dur: 1.4 },
+      columns:    { name: 'Columns',    kf: 'vPulse', dur: 1.4 },
+      center:     { name: 'Center',     kf: 'vPulse', dur: 1.4 },
+      diagonal:   { name: 'Diagonal',   kf: 'vPulse', dur: 1.4 },
+      checker:    { name: 'Checker',    kf: 'vBlink', dur: 1.2 },
+      cross:      { name: 'Cross',      kf: 'vPulse', dur: 1.4 },
+      breathe:    { name: 'Breathe',    kf: 'vBreathe', dur: 2 },
+      reverse:    { name: 'Reverse',    kf: 'vPulse', dur: 1.4 },
+      arch:       { name: 'Arch',       kf: 'vPulse', dur: 1.8 },
     };
 
-    /* ─── Build panel items ─── */
-    const panelList = document.getElementById('panelList');
+    /* ═══════════════════════════════════════
+       PATTERN ALGORITHMS
+    ═══════════════════════════════════════ */
 
-    variations.forEach(v => {
-      const item = document.createElement('div');
-      item.className = 'panel-item';
-      item.dataset.id = v.id;
+    function getSpiralOrder(tr, tc, n) {
+      let order = 0, top = 0, bottom = n - 1, left = 0, right = n - 1;
+      while (top <= bottom && left <= right) {
+        for (let c = left; c <= right; c++) { if (top === tr && c === tc) return order; order++; }
+        top++;
+        for (let r = top; r <= bottom; r++) { if (r === tr && right === tc) return order; order++; }
+        right--;
+        if (top <= bottom) { for (let c = right; c >= left; c--) { if (bottom === tr && c === tc) return order; order++; } bottom--; }
+        if (left <= right) { for (let r = bottom; r >= top; r--) { if (r === tr && left === tc) return order; order++; } left++; }
+      }
+      return order;
+    }
 
-      // Build preview grid
-      const shapeClass = `shape-${v.shape}`;
-      let dotsHtml = '';
-      for (let i = 0; i < 9; i++) {
-        dotsHtml += `<span style="animation: ${v.kf} ${v.dur}s ease-in-out infinite; animation-delay: ${v.delays[i]}s"></span>`;
+    function getArchData(row, col, n) {
+      for (let k = 0; ; k++) {
+        const o = k * 2, w = n - 2 * o;
+        if (w < 3) break;
+        const t = o, b = n - 1 - o, l = o, r = n - 1 - o;
+        const onBorder = (row >= t && row <= b && col >= l && col <= r) &&
+                         (row === t || row === b || col === l || col === r);
+        if (!onBorder) continue;
+        // Skip top corners for arch roundness on larger arches
+        if (w >= 5 && row === t && (col === l || col === r)) {
+          return { visible: false, delay: 0 };
+        }
+        return { visible: true, delay: k * 0.3 };
+      }
+      return { visible: false, delay: 0 };
+    }
+
+    function getPatternData(pattern, row, col, n) {
+      const total = n * n;
+      const maxD = 0.8; // max delay spread
+
+      switch (pattern) {
+        case 'sequential': {
+          const i = row * n + col;
+          return { visible: true, delay: total > 1 ? i / (total - 1) * maxD : 0 };
+        }
+        case 'spiral': {
+          const order = getSpiralOrder(row, col, n);
+          return { visible: true, delay: total > 1 ? order / (total - 1) * maxD : 0 };
+        }
+        case 'snake': {
+          const i = row % 2 === 0 ? row * n + col : row * n + (n - 1 - col);
+          return { visible: true, delay: total > 1 ? i / (total - 1) * maxD : 0 };
+        }
+        case 'rows': {
+          return { visible: true, delay: n > 1 ? row / (n - 1) * 0.5 : 0 };
+        }
+        case 'columns': {
+          return { visible: true, delay: n > 1 ? col / (n - 1) * 0.5 : 0 };
+        }
+        case 'center': {
+          const mid = (n - 1) / 2;
+          const dist = Math.max(Math.abs(row - mid), Math.abs(col - mid));
+          const maxDist = mid || 1;
+          return { visible: true, delay: dist / maxDist * 0.5 };
+        }
+        case 'diagonal': {
+          const maxSum = 2 * (n - 1) || 1;
+          return { visible: true, delay: (row + col) / maxSum * 0.6 };
+        }
+        case 'checker': {
+          return { visible: true, delay: ((row + col) % 2) * 0.5 };
+        }
+        case 'cross': {
+          const mid = Math.floor(n / 2);
+          const midAlt = n % 2 === 0 ? mid - 1 : mid;
+          const onCross = (row === mid || row === midAlt || col === mid || col === midAlt);
+          return { visible: true, delay: onCross ? 0 : 0.4 };
+        }
+        case 'breathe': {
+          return { visible: true, delay: 0 };
+        }
+        case 'reverse': {
+          const i = (total - 1) - (row * n + col);
+          return { visible: true, delay: total > 1 ? i / (total - 1) * maxD : 0 };
+        }
+        case 'arch': {
+          return getArchData(row, col, n);
+        }
+        default:
+          return { visible: true, delay: 0 };
+      }
+    }
+
+    /* ═══════════════════════════════════════
+       RENDER PREVIEW
+    ═══════════════════════════════════════ */
+    function renderPreview() {
+      const { size, grid: n, shape, pattern } = state;
+      const p = patterns[pattern];
+      const el = document.getElementById('preview');
+      const gap = Math.max(1, Math.round(size * 0.08));
+      const cellSize = (size - gap * (n - 1)) / n;
+      const dotSize = Math.max(2, Math.round(cellSize * 0.75));
+
+      el.style.gridTemplateColumns = `repeat(${n}, 1fr)`;
+      el.style.gap = gap + 'px';
+      el.style.width = size + 'px';
+      el.style.height = size + 'px';
+      el.innerHTML = '';
+
+      for (let r = 0; r < n; r++) {
+        for (let c = 0; c < n; c++) {
+          const data = getPatternData(pattern, r, c, n);
+          const dot = document.createElement('span');
+          dot.style.width = dotSize + 'px';
+          dot.style.height = dotSize + 'px';
+          dot.style.placeSelf = 'center';
+
+          if (shape === 'circle') dot.style.borderRadius = '50%';
+          else if (shape === 'square') dot.style.borderRadius = '2px';
+          else { dot.style.borderRadius = '1px'; dot.style.rotate = '45deg'; }
+
+          if (!data.visible) {
+            dot.style.visibility = 'hidden';
+          } else {
+            dot.style.animation = `${p.kf} ${p.dur}s ease-in-out infinite`;
+            dot.style.animationDelay = data.delay.toFixed(2) + 's';
+          }
+          el.appendChild(dot);
+        }
+      }
+    }
+
+    /* ═══════════════════════════════════════
+       RENDER PATTERN THUMBNAILS
+    ═══════════════════════════════════════ */
+    function renderThumbs() {
+      const grid = document.getElementById('patternGrid');
+      grid.innerHTML = '';
+
+      Object.entries(patterns).forEach(([key, p]) => {
+        const thumb = document.createElement('div');
+        thumb.className = 'pattern-thumb' + (key === state.pattern ? ' active' : '');
+
+        let dotsHtml = '';
+        for (let r = 0; r < 3; r++) {
+          for (let c = 0; c < 3; c++) {
+            const data = getPatternData(key, r, c, 3);
+            const vis = data.visible ? '' : 'visibility:hidden;';
+            const anim = data.visible
+              ? `animation:${p.kf} ${p.dur}s ease-in-out infinite;animation-delay:${data.delay.toFixed(2)}s;`
+              : '';
+            dotsHtml += `<span style="${vis}${anim}"></span>`;
+          }
+        }
+
+        thumb.innerHTML = `<div class="thumb-grid">${dotsHtml}</div><span class="thumb-name">${p.name}</span>`;
+
+        thumb.addEventListener('click', () => {
+          state.pattern = key;
+          grid.querySelectorAll('.pattern-thumb').forEach(t => t.classList.remove('active'));
+          thumb.classList.add('active');
+          renderPreview();
+        });
+
+        grid.appendChild(thumb);
+      });
+    }
+
+    /* ═══════════════════════════════════════
+       SNIPPET GENERATION
+    ═══════════════════════════════════════ */
+    const kfCSS = {
+      vPulse:   `@keyframes loader-anim {\n  0%, 60%, 100% { opacity: 0.12; transform: scale(0.8); }\n  30% { opacity: 1; transform: scale(1.1); }\n}`,
+      vBlink:   `@keyframes loader-anim {\n  0%, 100% { opacity: 0.08; }\n  40%, 60% { opacity: 1; }\n}`,
+      vBreathe: `@keyframes loader-anim {\n  0%, 100% { transform: scale(0.5); opacity: 0.12; }\n  50% { transform: scale(1); opacity: 0.9; }\n}`,
+      vGrow:    `@keyframes loader-anim {\n  0%, 70%, 100% { transform: scale(0); opacity: 0; }\n  35% { transform: scale(1.15); opacity: 1; }\n}`,
+    };
+
+    function generateSnippet() {
+      const { size, grid: n, shape, pattern } = state;
+      const p = patterns[pattern];
+      const gap = Math.max(1, Math.round(size * 0.08));
+      const cellSize = (size - gap * (n - 1)) / n;
+      const dotSize = Math.max(2, Math.round(cellSize * 0.75));
+
+      const shapeCSS = { circle: 'border-radius: 50%;', square: 'border-radius: 2px;', diamond: 'border-radius: 1px; rotate: 45deg;' };
+
+      let dotsLines = [], delayRules = [], idx = 0;
+      for (let r = 0; r < n; r++) {
+        let line = '  ';
+        for (let c = 0; c < n; c++) {
+          idx++;
+          line += '<span></span>';
+          const data = getPatternData(pattern, r, c, n);
+          if (!data.visible) {
+            delayRules.push(`.loader span:nth-child(${idx}) { visibility: hidden; }`);
+          } else {
+            delayRules.push(`.loader span:nth-child(${idx}) { animation-delay: ${data.delay.toFixed(2)}s; }`);
+          }
+        }
+        dotsLines.push(line);
       }
 
-      item.innerHTML = `
-        <div class="panel-item-preview">
-          <div class="v-grid ${shapeClass}">${dotsHtml}</div>
-        </div>
-        <div class="panel-item-text">
-          <div class="panel-item-category">${v.cat}</div>
-          <div class="panel-item-name">${v.name}</div>
-          <div class="panel-item-desc">${v.desc}</div>
-        </div>
-        <div class="panel-item-copy">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-        </div>
-      `;
-
-      item.addEventListener('click', () => copyVariation(v, item));
-      panelList.appendChild(item);
-    });
-
-    /* ─── Generate snippet for a dot grid variation ─── */
-    function generateDotGridSnippet(v) {
-      const shapeStyles = {
-        circle: 'border-radius: 50%;',
-        square: 'border-radius: 2px;',
-        diamond: 'border-radius: 1px; rotate: 45deg;',
-      };
-
-      let delayRules = '';
-      for (let i = 0; i < 9; i++) {
-        delayRules += `\n.loader-${v.id} span:nth-child(${i+1}) { animation-delay: ${v.delays[i]}s; }`;
-      }
-
-      return `<!-- Loader: ${v.name} -->
-<div class="loader-${v.id}">
-  <span></span><span></span><span></span>
-  <span></span><span></span><span></span>
-  <span></span><span></span><span></span>
+      return `<!-- Dot Grid: ${p.name} ${n}\u00d7${n} ${shape} ${size}px -->
+<div class="loader">
+${dotsLines.join('\n')}
 </div>
 
 <style>
-.loader-${v.id} {
+.loader {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 4px;
-  width: 28px;
-  height: 28px;
+  grid-template-columns: repeat(${n}, 1fr);
+  gap: ${gap}px;
+  width: ${size}px;
+  height: ${size}px;
 }
 
-.loader-${v.id} span {
-  width: 6px;
-  height: 6px;
-  ${shapeStyles[v.shape]}
+.loader span {
+  width: ${dotSize}px;
+  height: ${dotSize}px;
+  ${shapeCSS[shape]}
   background: currentColor;
-  animation: loader-${v.id}-anim ${v.dur}s ease-in-out infinite;
+  animation: loader-anim ${p.dur}s ease-in-out infinite;
+  place-self: center;
 }
-${delayRules}
 
-${kfSnippets[v.kf].replace(v.kf, `loader-${v.id}-anim`)}
+${delayRules.join('\n')}
+
+${kfCSS[p.kf]}
 </style>`;
     }
 
-    /* ─── Main loader snippets (non-dot-grid) ─── */
-    const mainSnippets = {
-      'ring': `<!-- Loader: Ring Spinner -->
-<div class="loader-ring"></div>
+    /* ═══════════════════════════════════════
+       CONTROLS
+    ═══════════════════════════════════════ */
 
-<style>
-.loader-ring {
-  width: 28px; height: 28px;
-  border: 2.5px solid rgba(128,128,128,0.2);
-  border-top-color: currentColor;
-  border-radius: 50%;
-  animation: loader-ring-spin 0.8s linear infinite;
-}
-@keyframes loader-ring-spin { to { transform: rotate(360deg); } }
-</style>`,
+    // Size slider
+    const sizeSlider = document.getElementById('sizeSlider');
+    const sizeValue = document.getElementById('sizeValue');
+    sizeSlider.addEventListener('input', () => {
+      state.size = parseInt(sizeSlider.value);
+      sizeValue.textContent = state.size + 'px';
+      renderPreview();
+    });
 
-      'pulse-ring': `<!-- Loader: Pulse Ring -->
-<div class="loader-pulse-ring"></div>
+    // Segmented button helper
+    function initSeg(id, stateKey, onChange) {
+      const group = document.getElementById(id);
+      group.querySelectorAll('.seg-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          group.querySelectorAll('.seg-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          const val = btn.dataset.val;
+          state[stateKey] = isNaN(val) ? val : parseInt(val);
+          if (onChange) onChange();
+          renderPreview();
+        });
+      });
+    }
 
-<style>
-.loader-pulse-ring { width: 24px; height: 24px; position: relative; }
-.loader-pulse-ring::before,
-.loader-pulse-ring::after {
-  content: ''; position: absolute; inset: 0;
-  border: 2px solid currentColor; border-radius: 50%;
-  animation: loader-pulse-ring-expand 1.6s cubic-bezier(0.4,0,0.2,1) infinite;
-}
-.loader-pulse-ring::after { animation-delay: 0.6s; }
-@keyframes loader-pulse-ring-expand {
-  0% { transform: scale(0.5); opacity: 1; }
-  100% { transform: scale(1.6); opacity: 0; }
-}
-</style>`,
+    initSeg('gridSeg', 'grid');
+    initSeg('shapeSeg', 'shape');
 
-      'bars': `<!-- Loader: Bar Wave -->
-<div class="loader-bars">
-  <span></span><span></span><span></span><span></span><span></span>
-</div>
+    // Copy button
+    const copyBtn = document.getElementById('copyBtn');
+    copyBtn.addEventListener('click', () => {
+      const snippet = generateSnippet();
+      navigator.clipboard.writeText(snippet).then(() => {
+        showToast('Copied snippet to clipboard');
+        copyBtn.classList.add('copied');
+        setTimeout(() => copyBtn.classList.remove('copied'), 600);
+      });
+    });
 
-<style>
-.loader-bars { display: flex; align-items: center; gap: 3px; height: 28px; }
-.loader-bars span {
-  width: 3px; height: 8px; border-radius: 2px;
-  background: currentColor;
-  animation: loader-bars-wave 1s ease-in-out infinite;
-}
-.loader-bars span:nth-child(1) { animation-delay: 0s; }
-.loader-bars span:nth-child(2) { animation-delay: 0.1s; }
-.loader-bars span:nth-child(3) { animation-delay: 0.2s; }
-.loader-bars span:nth-child(4) { animation-delay: 0.3s; }
-.loader-bars span:nth-child(5) { animation-delay: 0.4s; }
-@keyframes loader-bars-wave {
-  0%, 100% { height: 8px; opacity: 0.3; }
-  50% { height: 24px; opacity: 1; }
-}
-</style>`,
-
-      'orbit': `<!-- Loader: Orbit -->
-<div class="loader-orbit">
-  <span></span><span></span><span></span><span></span>
-</div>
-
-<style>
-.loader-orbit {
-  width: 28px; height: 28px; position: relative;
-  animation: loader-orbit-spin 1.5s linear infinite;
-}
-.loader-orbit span {
-  position: absolute; width: 6px; height: 6px;
-  border-radius: 50%; background: currentColor;
-}
-.loader-orbit span:nth-child(1) { top: 0; left: 50%; transform: translateX(-50%); opacity: 1; }
-.loader-orbit span:nth-child(2) { top: 50%; right: 0; transform: translateY(-50%); opacity: 0.6; }
-.loader-orbit span:nth-child(3) { bottom: 0; left: 50%; transform: translateX(-50%); opacity: 0.3; }
-.loader-orbit span:nth-child(4) { top: 50%; left: 0; transform: translateY(-50%); opacity: 0.15; }
-@keyframes loader-orbit-spin { to { transform: rotate(360deg); } }
-</style>`,
-
-      'morph': `<!-- Loader: Morphing Shape -->
-<div class="loader-morph"></div>
-
-<style>
-.loader-morph {
-  width: 24px; height: 24px;
-  background: currentColor;
-  animation: loader-morph-anim 2s ease-in-out infinite;
-}
-@keyframes loader-morph-anim {
-  0%, 100% { border-radius: 50%; transform: rotate(0deg) scale(1); }
-  25% { border-radius: 4px; transform: rotate(90deg) scale(0.85); }
-  50% { border-radius: 50% 4px; transform: rotate(180deg) scale(1); }
-  75% { border-radius: 4px 50%; transform: rotate(270deg) scale(0.85); }
-}
-</style>`,
-
-      'lines': `<!-- Loader: Line Sweep -->
-<div class="loader-lines">
-  <span></span><span></span><span></span><span></span>
-</div>
-
-<style>
-.loader-lines { display: flex; flex-direction: column; gap: 4px; width: 28px; }
-.loader-lines span {
-  height: 2.5px; border-radius: 2px; background: currentColor;
-  animation: loader-lines-sweep 1.2s ease-in-out infinite;
-  transform-origin: left center;
-}
-.loader-lines span:nth-child(1) { animation-delay: 0s; }
-.loader-lines span:nth-child(2) { animation-delay: 0.15s; }
-.loader-lines span:nth-child(3) { animation-delay: 0.3s; }
-.loader-lines span:nth-child(4) { animation-delay: 0.45s; }
-@keyframes loader-lines-sweep {
-  0%, 100% { transform: scaleX(0.3); opacity: 0.2; }
-  50% { transform: scaleX(1); opacity: 1; }
-}
-</style>`,
-
-      'bounce-dots': `<!-- Loader: Bouncing Dots -->
-<div class="loader-bounce">
-  <span></span><span></span><span></span>
-</div>
-
-<style>
-.loader-bounce { display: flex; align-items: center; gap: 5px; }
-.loader-bounce span {
-  width: 7px; height: 7px; border-radius: 50%;
-  background: currentColor;
-  animation: loader-bounce-anim 1.2s ease-in-out infinite;
-}
-.loader-bounce span:nth-child(1) { animation-delay: 0s; }
-.loader-bounce span:nth-child(2) { animation-delay: 0.15s; }
-.loader-bounce span:nth-child(3) { animation-delay: 0.3s; }
-@keyframes loader-bounce-anim {
-  0%, 80%, 100% { transform: translateY(0); opacity: 0.3; }
-  40% { transform: translateY(-10px); opacity: 1; }
-}
-</style>`,
-
-      'squares': `<!-- Loader: Square Cascade -->
-<div class="loader-squares">
-  <span></span><span></span><span></span><span></span>
-</div>
-
-<style>
-.loader-squares {
-  display: grid; grid-template-columns: repeat(2, 1fr);
-  gap: 3px; width: 23px; height: 23px;
-}
-.loader-squares span {
-  width: 10px; height: 10px; border-radius: 2px;
-  background: currentColor;
-  animation: loader-squares-anim 1.6s ease-in-out infinite;
-}
-.loader-squares span:nth-child(1) { animation-delay: 0s; }
-.loader-squares span:nth-child(2) { animation-delay: 0.2s; }
-.loader-squares span:nth-child(3) { animation-delay: 0.6s; }
-.loader-squares span:nth-child(4) { animation-delay: 0.4s; }
-@keyframes loader-squares-anim {
-  0%, 70%, 100% { opacity: 0.1; transform: scale(0.85); }
-  35% { opacity: 1; transform: scale(1); }
-}
-</style>`,
-
-      'diamond': `<!-- Loader: Diamond Rotate -->
-<div class="loader-diamond">
-  <span></span><span></span><span></span><span></span>
-</div>
-
-<style>
-.loader-diamond { width: 20px; height: 20px; position: relative; }
-.loader-diamond span {
-  position: absolute; width: 8px; height: 8px;
-  background: currentColor; transform: rotate(45deg);
-  border-radius: 1.5px;
-  animation: loader-diamond-anim 1.4s ease-in-out infinite;
-}
-.loader-diamond span:nth-child(1) { top: 0; left: 6px; animation-delay: 0s; }
-.loader-diamond span:nth-child(2) { top: 6px; right: 0; animation-delay: 0.2s; }
-.loader-diamond span:nth-child(3) { bottom: 0; left: 6px; animation-delay: 0.4s; }
-.loader-diamond span:nth-child(4) { top: 6px; left: 0; animation-delay: 0.6s; }
-@keyframes loader-diamond-anim {
-  0%, 70%, 100% { opacity: 0.1; transform: rotate(45deg) scale(0.7); }
-  35% { opacity: 1; transform: rotate(45deg) scale(1); }
-}
-</style>`,
-
-      'cross': `<!-- Loader: Cross Fade -->
-<div class="loader-cross">
-  <span class="h"></span><span class="v"></span>
-</div>
-
-<style>
-.loader-cross { width: 24px; height: 24px; position: relative; }
-.loader-cross span {
-  position: absolute; background: currentColor;
-  border-radius: 2px;
-  animation: loader-cross-fade 1.2s ease-in-out infinite;
-}
-.loader-cross .h { width: 24px; height: 3px; top: 50%; left: 0; transform: translateY(-50%); }
-.loader-cross .v { width: 3px; height: 24px; left: 50%; top: 0; transform: translateX(-50%); animation-delay: 0.6s; }
-@keyframes loader-cross-fade {
-  0%, 100% { opacity: 0.15; }
-  50% { opacity: 1; }
-}
-</style>`,
-
-      'stagger': `<!-- Loader: Staggered Scale -->
-<div class="loader-stagger">
-  <span></span><span></span><span></span><span></span><span></span>
-</div>
-
-<style>
-.loader-stagger { display: flex; align-items: center; gap: 4px; }
-.loader-stagger span {
-  width: 6px; height: 6px; border-radius: 1.5px;
-  background: currentColor;
-  animation: loader-stagger-anim 1.2s ease-in-out infinite;
-}
-.loader-stagger span:nth-child(1) { animation-delay: 0s; }
-.loader-stagger span:nth-child(2) { animation-delay: 0.12s; }
-.loader-stagger span:nth-child(3) { animation-delay: 0.24s; }
-.loader-stagger span:nth-child(4) { animation-delay: 0.36s; }
-.loader-stagger span:nth-child(5) { animation-delay: 0.48s; }
-@keyframes loader-stagger-anim {
-  0%, 60%, 100% { transform: scale(0.6); opacity: 0.15; }
-  30% { transform: scale(1.3); opacity: 1; }
-}
-</style>`,
-
-      'breathe-circle': `<!-- Loader: Breathing Circle -->
-<div class="loader-breathe"></div>
-
-<style>
-.loader-breathe {
-  width: 22px; height: 22px; border-radius: 50%;
-  background: currentColor;
-  animation: loader-breathe-anim 2s ease-in-out infinite;
-}
-@keyframes loader-breathe-anim {
-  0%, 100% { transform: scale(0.6); opacity: 0.2; }
-  50% { transform: scale(1); opacity: 0.8; }
-}
-</style>`,
-
-      'dash': `<!-- Loader: Dash Spinner -->
-<div class="loader-dash"></div>
-
-<style>
-.loader-dash {
-  width: 26px; height: 26px;
-  border: 2.5px solid transparent;
-  border-radius: 50%; position: relative;
-  animation: loader-dash-spin 1s linear infinite;
-}
-.loader-dash::before {
-  content: ''; position: absolute; inset: -2.5px;
-  border: 2.5px solid transparent;
-  border-top-color: currentColor;
-  border-right-color: currentColor;
-  border-radius: 50%; opacity: 0.8;
-}
-.loader-dash::after {
-  content: ''; position: absolute; inset: 3px;
-  border: 2px solid transparent;
-  border-bottom-color: currentColor;
-  border-radius: 50%; opacity: 0.3;
-  animation: loader-dash-rev 0.6s linear infinite;
-}
-@keyframes loader-dash-spin { to { transform: rotate(360deg); } }
-@keyframes loader-dash-rev { to { transform: rotate(-360deg); } }
-</style>`,
-
-      'flip': `<!-- Loader: Flip Square -->
-<div class="loader-flip"></div>
-
-<style>
-.loader-flip {
-  width: 22px; height: 22px;
-  background: currentColor; border-radius: 3px;
-  animation: loader-flip-anim 1.6s ease-in-out infinite;
-}
-@keyframes loader-flip-anim {
-  0% { transform: perspective(200px) rotateX(0deg) rotateY(0deg); }
-  25% { transform: perspective(200px) rotateX(180deg) rotateY(0deg); }
-  50% { transform: perspective(200px) rotateX(180deg) rotateY(180deg); }
-  75% { transform: perspective(200px) rotateX(0deg) rotateY(180deg); }
-  100% { transform: perspective(200px) rotateX(0deg) rotateY(360deg); }
-}
-</style>`,
-
-      'trail': `<!-- Loader: Dot Trail -->
-<div class="loader-trail">
-  <span></span><span></span><span></span><span></span><span></span>
-</div>
-
-<style>
-.loader-trail {
-  width: 28px; height: 28px; position: relative;
-  animation: loader-trail-spin 1.8s linear infinite;
-}
-.loader-trail span {
-  position: absolute; border-radius: 50%; background: currentColor;
-}
-.loader-trail span:nth-child(1) { width: 5px; height: 5px; top: 0; left: 50%; transform: translateX(-50%); opacity: 1; }
-.loader-trail span:nth-child(2) { width: 4.5px; height: 4.5px; top: 3px; right: 3px; opacity: 0.75; }
-.loader-trail span:nth-child(3) { width: 4px; height: 4px; top: 50%; right: 0; transform: translateY(-50%); opacity: 0.5; }
-.loader-trail span:nth-child(4) { width: 3.5px; height: 3.5px; bottom: 3px; right: 3px; opacity: 0.3; }
-.loader-trail span:nth-child(5) { width: 3px; height: 3px; bottom: 0; left: 50%; transform: translateX(-50%); opacity: 0.15; }
-@keyframes loader-trail-spin { to { transform: rotate(360deg); } }
-</style>`,
-
-      'elastic': `<!-- Loader: Elastic Line -->
-<div class="loader-elastic"></div>
-
-<style>
-.loader-elastic {
-  width: 32px; height: 3px;
-  background: rgba(128,128,128,0.2);
-  border-radius: 2px; position: relative;
-  overflow: hidden;
-}
-.loader-elastic::before {
-  content: ''; position: absolute;
-  top: 0; left: -40%; width: 40%; height: 100%;
-  background: currentColor; border-radius: 2px;
-  animation: loader-elastic-slide 1s ease-in-out infinite;
-}
-@keyframes loader-elastic-slide {
-  0% { left: -40%; width: 40%; }
-  50% { left: 30%; width: 60%; }
-  100% { left: 110%; width: 40%; }
-}
-</style>`,
-
-      'hex': `<!-- Loader: Hex Dots -->
-<div class="loader-hex">
-  <span></span><span></span><span></span>
-  <span></span><span></span><span></span>
-</div>
-
-<style>
-.loader-hex { width: 30px; height: 26px; position: relative; }
-.loader-hex span {
-  position: absolute; width: 5px; height: 5px;
-  border-radius: 50%; background: currentColor;
-  animation: loader-hex-pulse 1.6s ease-in-out infinite;
-}
-.loader-hex span:nth-child(1) { top: 0; left: 8px; animation-delay: 0s; }
-.loader-hex span:nth-child(2) { top: 0; left: 17px; animation-delay: 0.15s; }
-.loader-hex span:nth-child(3) { top: 10px; left: 22px; animation-delay: 0.3s; }
-.loader-hex span:nth-child(4) { top: 20px; left: 17px; animation-delay: 0.45s; }
-.loader-hex span:nth-child(5) { top: 20px; left: 8px; animation-delay: 0.6s; }
-.loader-hex span:nth-child(6) { top: 10px; left: 3px; animation-delay: 0.75s; }
-@keyframes loader-hex-pulse {
-  0%, 60%, 100% { opacity: 0.1; transform: scale(0.7); }
-  30% { opacity: 1; transform: scale(1.2); }
-}
-</style>`,
-    };
-
-    /* ─── Panel toggle ─── */
+    /* ═══════════════════════════════════════
+       PANEL TOGGLE
+    ═══════════════════════════════════════ */
     const panel = document.getElementById('panel');
     const backdrop = document.getElementById('backdrop');
-    const panelCloseBtn = document.getElementById('panelClose');
     const dotGridCard = document.querySelector('[data-loader="dot-grid"]');
-
     let panelOpen = false;
 
     function togglePanel() {
@@ -1207,6 +912,7 @@ ${kfSnippets[v.kf].replace(v.kf, `loader-${v.id}-anim`)}
       panel.classList.toggle('open', panelOpen);
       backdrop.classList.toggle('open', panelOpen);
       dotGridCard.classList.toggle('active', panelOpen);
+      if (panelOpen) renderPreview();
     }
 
     function closePanel() {
@@ -1218,16 +924,14 @@ ${kfSnippets[v.kf].replace(v.kf, `loader-${v.id}-anim`)}
 
     dotGridCard.addEventListener('click', togglePanel);
     backdrop.addEventListener('click', closePanel);
-    panelCloseBtn.addEventListener('click', closePanel);
+    document.getElementById('panelClose').addEventListener('click', closePanel);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && panelOpen) closePanel(); });
 
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape' && panelOpen) closePanel();
-    });
-
-    /* ─── Toast ─── */
+    /* ═══════════════════════════════════════
+       TOAST
+    ═══════════════════════════════════════ */
     const toast = document.getElementById('toast');
     let toastTimer;
-
     function showToast(msg) {
       toast.textContent = msg || 'Copied to clipboard';
       toast.classList.add('show');
@@ -1235,36 +939,48 @@ ${kfSnippets[v.kf].replace(v.kf, `loader-${v.id}-anim`)}
       toastTimer = setTimeout(() => toast.classList.remove('show'), 2000);
     }
 
-    /* ─── Copy variation snippet ─── */
-    function copyVariation(v, itemEl) {
-      const snippet = generateDotGridSnippet(v);
-      navigator.clipboard.writeText(snippet).then(() => {
-        showToast(`Copied "${v.name}" snippet`);
-        itemEl.classList.add('copied');
-        setTimeout(() => itemEl.classList.remove('copied'), 600);
-      });
-    }
+    /* ═══════════════════════════════════════
+       MAIN CARD CLICK-TO-COPY (non dot-grid)
+    ═══════════════════════════════════════ */
+    const mainSnippets = {
+      'ring': `<!-- Ring Spinner -->\n<div class="loader-ring"></div>\n<style>\n.loader-ring { width: 28px; height: 28px; border: 2.5px solid rgba(128,128,128,0.2); border-top-color: currentColor; border-radius: 50%; animation: loader-ring-spin 0.8s linear infinite; }\n@keyframes loader-ring-spin { to { transform: rotate(360deg); } }\n</style>`,
+      'pulse-ring': `<!-- Pulse Ring -->\n<div class="loader-pulse-ring"></div>\n<style>\n.loader-pulse-ring { width: 24px; height: 24px; position: relative; }\n.loader-pulse-ring::before, .loader-pulse-ring::after { content: ''; position: absolute; inset: 0; border: 2px solid currentColor; border-radius: 50%; animation: loader-pr-expand 1.6s cubic-bezier(0.4,0,0.2,1) infinite; }\n.loader-pulse-ring::after { animation-delay: 0.6s; }\n@keyframes loader-pr-expand { 0% { transform: scale(0.5); opacity: 1; } 100% { transform: scale(1.6); opacity: 0; } }\n</style>`,
+      'bars': `<!-- Bar Wave -->\n<div class="loader-bars"><span></span><span></span><span></span><span></span><span></span></div>\n<style>\n.loader-bars { display: flex; align-items: center; gap: 3px; height: 28px; }\n.loader-bars span { width: 3px; height: 8px; border-radius: 2px; background: currentColor; animation: loader-bars-w 1s ease-in-out infinite; }\n.loader-bars span:nth-child(1) { animation-delay: 0s; }\n.loader-bars span:nth-child(2) { animation-delay: 0.1s; }\n.loader-bars span:nth-child(3) { animation-delay: 0.2s; }\n.loader-bars span:nth-child(4) { animation-delay: 0.3s; }\n.loader-bars span:nth-child(5) { animation-delay: 0.4s; }\n@keyframes loader-bars-w { 0%, 100% { height: 8px; opacity: 0.3; } 50% { height: 24px; opacity: 1; } }\n</style>`,
+      'orbit': `<!-- Orbit -->\n<div class="loader-orbit"><span></span><span></span><span></span><span></span></div>\n<style>\n.loader-orbit { width: 28px; height: 28px; position: relative; animation: loader-orbit-r 1.5s linear infinite; }\n.loader-orbit span { position: absolute; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }\n.loader-orbit span:nth-child(1) { top: 0; left: 50%; transform: translateX(-50%); opacity: 1; }\n.loader-orbit span:nth-child(2) { top: 50%; right: 0; transform: translateY(-50%); opacity: 0.6; }\n.loader-orbit span:nth-child(3) { bottom: 0; left: 50%; transform: translateX(-50%); opacity: 0.3; }\n.loader-orbit span:nth-child(4) { top: 50%; left: 0; transform: translateY(-50%); opacity: 0.15; }\n@keyframes loader-orbit-r { to { transform: rotate(360deg); } }\n</style>`,
+      'morph': `<!-- Morphing Shape -->\n<div class="loader-morph"></div>\n<style>\n.loader-morph { width: 24px; height: 24px; background: currentColor; animation: loader-morph-a 2s ease-in-out infinite; }\n@keyframes loader-morph-a { 0%, 100% { border-radius: 50%; transform: rotate(0) scale(1); } 25% { border-radius: 4px; transform: rotate(90deg) scale(0.85); } 50% { border-radius: 50% 4px; transform: rotate(180deg) scale(1); } 75% { border-radius: 4px 50%; transform: rotate(270deg) scale(0.85); } }\n</style>`,
+      'lines': `<!-- Line Sweep -->\n<div class="loader-lines"><span></span><span></span><span></span><span></span></div>\n<style>\n.loader-lines { display: flex; flex-direction: column; gap: 4px; width: 28px; }\n.loader-lines span { height: 2.5px; border-radius: 2px; background: currentColor; animation: loader-lines-s 1.2s ease-in-out infinite; transform-origin: left center; }\n.loader-lines span:nth-child(1) { animation-delay: 0s; }\n.loader-lines span:nth-child(2) { animation-delay: 0.15s; }\n.loader-lines span:nth-child(3) { animation-delay: 0.3s; }\n.loader-lines span:nth-child(4) { animation-delay: 0.45s; }\n@keyframes loader-lines-s { 0%, 100% { transform: scaleX(0.3); opacity: 0.2; } 50% { transform: scaleX(1); opacity: 1; } }\n</style>`,
+      'bounce-dots': `<!-- Bouncing Dots -->\n<div class="loader-bounce"><span></span><span></span><span></span></div>\n<style>\n.loader-bounce { display: flex; align-items: center; gap: 5px; }\n.loader-bounce span { width: 7px; height: 7px; border-radius: 50%; background: currentColor; animation: loader-bounce-a 1.2s ease-in-out infinite; }\n.loader-bounce span:nth-child(1) { animation-delay: 0s; }\n.loader-bounce span:nth-child(2) { animation-delay: 0.15s; }\n.loader-bounce span:nth-child(3) { animation-delay: 0.3s; }\n@keyframes loader-bounce-a { 0%, 80%, 100% { transform: translateY(0); opacity: 0.3; } 40% { transform: translateY(-10px); opacity: 1; } }\n</style>`,
+      'squares': `<!-- Square Cascade -->\n<div class="loader-squares"><span></span><span></span><span></span><span></span></div>\n<style>\n.loader-squares { display: grid; grid-template-columns: repeat(2, 1fr); gap: 3px; width: 23px; height: 23px; }\n.loader-squares span { width: 10px; height: 10px; border-radius: 2px; background: currentColor; animation: loader-sq-a 1.6s ease-in-out infinite; }\n.loader-squares span:nth-child(1) { animation-delay: 0s; }\n.loader-squares span:nth-child(2) { animation-delay: 0.2s; }\n.loader-squares span:nth-child(3) { animation-delay: 0.6s; }\n.loader-squares span:nth-child(4) { animation-delay: 0.4s; }\n@keyframes loader-sq-a { 0%, 70%, 100% { opacity: 0.1; transform: scale(0.85); } 35% { opacity: 1; transform: scale(1); } }\n</style>`,
+      'diamond': `<!-- Diamond Rotate -->\n<div class="loader-diamond"><span></span><span></span><span></span><span></span></div>\n<style>\n.loader-diamond { width: 20px; height: 20px; position: relative; }\n.loader-diamond span { position: absolute; width: 8px; height: 8px; background: currentColor; transform: rotate(45deg); border-radius: 1.5px; animation: loader-dia-a 1.4s ease-in-out infinite; }\n.loader-diamond span:nth-child(1) { top: 0; left: 6px; animation-delay: 0s; }\n.loader-diamond span:nth-child(2) { top: 6px; right: 0; animation-delay: 0.2s; }\n.loader-diamond span:nth-child(3) { bottom: 0; left: 6px; animation-delay: 0.4s; }\n.loader-diamond span:nth-child(4) { top: 6px; left: 0; animation-delay: 0.6s; }\n@keyframes loader-dia-a { 0%, 70%, 100% { opacity: 0.1; transform: rotate(45deg) scale(0.7); } 35% { opacity: 1; transform: rotate(45deg) scale(1); } }\n</style>`,
+      'cross': `<!-- Cross Fade -->\n<div class="loader-cross"><span class="h"></span><span class="v"></span></div>\n<style>\n.loader-cross { width: 24px; height: 24px; position: relative; }\n.loader-cross span { position: absolute; background: currentColor; border-radius: 2px; animation: loader-cross-f 1.2s ease-in-out infinite; }\n.loader-cross .h { width: 24px; height: 3px; top: 50%; left: 0; transform: translateY(-50%); }\n.loader-cross .v { width: 3px; height: 24px; left: 50%; top: 0; transform: translateX(-50%); animation-delay: 0.6s; }\n@keyframes loader-cross-f { 0%, 100% { opacity: 0.15; } 50% { opacity: 1; } }\n</style>`,
+      'stagger': `<!-- Staggered Scale -->\n<div class="loader-stagger"><span></span><span></span><span></span><span></span><span></span></div>\n<style>\n.loader-stagger { display: flex; align-items: center; gap: 4px; }\n.loader-stagger span { width: 6px; height: 6px; border-radius: 1.5px; background: currentColor; animation: loader-stag-a 1.2s ease-in-out infinite; }\n.loader-stagger span:nth-child(1) { animation-delay: 0s; }\n.loader-stagger span:nth-child(2) { animation-delay: 0.12s; }\n.loader-stagger span:nth-child(3) { animation-delay: 0.24s; }\n.loader-stagger span:nth-child(4) { animation-delay: 0.36s; }\n.loader-stagger span:nth-child(5) { animation-delay: 0.48s; }\n@keyframes loader-stag-a { 0%, 60%, 100% { transform: scale(0.6); opacity: 0.15; } 30% { transform: scale(1.3); opacity: 1; } }\n</style>`,
+      'breathe-circle': `<!-- Breathing Circle -->\n<div class="loader-breathe"></div>\n<style>\n.loader-breathe { width: 22px; height: 22px; border-radius: 50%; background: currentColor; animation: loader-breathe-a 2s ease-in-out infinite; }\n@keyframes loader-breathe-a { 0%, 100% { transform: scale(0.6); opacity: 0.2; } 50% { transform: scale(1); opacity: 0.8; } }\n</style>`,
+      'dash': `<!-- Dash Spinner -->\n<div class="loader-dash"></div>\n<style>\n.loader-dash { width: 26px; height: 26px; border: 2.5px solid transparent; border-radius: 50%; position: relative; animation: loader-dash-s 1s linear infinite; }\n.loader-dash::before { content: ''; position: absolute; inset: -2.5px; border: 2.5px solid transparent; border-top-color: currentColor; border-right-color: currentColor; border-radius: 50%; opacity: 0.8; }\n.loader-dash::after { content: ''; position: absolute; inset: 3px; border: 2px solid transparent; border-bottom-color: currentColor; border-radius: 50%; opacity: 0.3; animation: loader-dash-r 0.6s linear infinite; }\n@keyframes loader-dash-s { to { transform: rotate(360deg); } }\n@keyframes loader-dash-r { to { transform: rotate(-360deg); } }\n</style>`,
+      'flip': `<!-- Flip Square -->\n<div class="loader-flip"></div>\n<style>\n.loader-flip { width: 22px; height: 22px; background: currentColor; border-radius: 3px; animation: loader-flip-a 1.6s ease-in-out infinite; }\n@keyframes loader-flip-a { 0% { transform: perspective(200px) rotateX(0) rotateY(0); } 25% { transform: perspective(200px) rotateX(180deg) rotateY(0); } 50% { transform: perspective(200px) rotateX(180deg) rotateY(180deg); } 75% { transform: perspective(200px) rotateX(0) rotateY(180deg); } 100% { transform: perspective(200px) rotateX(0) rotateY(360deg); } }\n</style>`,
+      'trail': `<!-- Dot Trail -->\n<div class="loader-trail"><span></span><span></span><span></span><span></span><span></span></div>\n<style>\n.loader-trail { width: 28px; height: 28px; position: relative; animation: loader-trail-r 1.8s linear infinite; }\n.loader-trail span { position: absolute; border-radius: 50%; background: currentColor; }\n.loader-trail span:nth-child(1) { width: 5px; height: 5px; top: 0; left: 50%; transform: translateX(-50%); opacity: 1; }\n.loader-trail span:nth-child(2) { width: 4.5px; height: 4.5px; top: 3px; right: 3px; opacity: 0.75; }\n.loader-trail span:nth-child(3) { width: 4px; height: 4px; top: 50%; right: 0; transform: translateY(-50%); opacity: 0.5; }\n.loader-trail span:nth-child(4) { width: 3.5px; height: 3.5px; bottom: 3px; right: 3px; opacity: 0.3; }\n.loader-trail span:nth-child(5) { width: 3px; height: 3px; bottom: 0; left: 50%; transform: translateX(-50%); opacity: 0.15; }\n@keyframes loader-trail-r { to { transform: rotate(360deg); } }\n</style>`,
+      'elastic': `<!-- Elastic Line -->\n<div class="loader-elastic"></div>\n<style>\n.loader-elastic { width: 32px; height: 3px; background: rgba(128,128,128,0.2); border-radius: 2px; position: relative; overflow: hidden; }\n.loader-elastic::before { content: ''; position: absolute; top: 0; left: -40%; width: 40%; height: 100%; background: currentColor; border-radius: 2px; animation: loader-elastic-s 1s ease-in-out infinite; }\n@keyframes loader-elastic-s { 0% { left: -40%; width: 40%; } 50% { left: 30%; width: 60%; } 100% { left: 110%; width: 40%; } }\n</style>`,
+      'hex': `<!-- Hex Dots -->\n<div class="loader-hex"><span></span><span></span><span></span><span></span><span></span><span></span></div>\n<style>\n.loader-hex { width: 30px; height: 26px; position: relative; }\n.loader-hex span { position: absolute; width: 5px; height: 5px; border-radius: 50%; background: currentColor; animation: loader-hex-p 1.6s ease-in-out infinite; }\n.loader-hex span:nth-child(1) { top: 0; left: 8px; animation-delay: 0s; }\n.loader-hex span:nth-child(2) { top: 0; left: 17px; animation-delay: 0.15s; }\n.loader-hex span:nth-child(3) { top: 10px; left: 22px; animation-delay: 0.3s; }\n.loader-hex span:nth-child(4) { top: 20px; left: 17px; animation-delay: 0.45s; }\n.loader-hex span:nth-child(5) { top: 20px; left: 8px; animation-delay: 0.6s; }\n.loader-hex span:nth-child(6) { top: 10px; left: 3px; animation-delay: 0.75s; }\n@keyframes loader-hex-p { 0%, 60%, 100% { opacity: 0.1; transform: scale(0.7); } 30% { opacity: 1; transform: scale(1.2); } }\n</style>`,
+    };
 
-    /* ─── Copy main loader snippet ─── */
     document.querySelectorAll('.card').forEach(card => {
       const loader = card.dataset.loader;
-      if (loader === 'dot-grid') return; // handled by panel toggle
-
+      if (loader === 'dot-grid') return;
       card.addEventListener('click', () => {
         const snippet = mainSnippets[loader];
         if (!snippet) return;
         navigator.clipboard.writeText(snippet).then(() => {
-          showToast(`Copied "${card.querySelector('.card-label').textContent}" snippet`);
+          showToast(`Copied "${card.querySelector('.card-label').textContent}"`);
           card.classList.add('active');
           setTimeout(() => card.classList.remove('active'), 400);
         });
       });
     });
 
-    /* ─── Theme toggle ─── */
+    /* ═══════════════════════════════════════
+       THEME TOGGLE
+    ═══════════════════════════════════════ */
     const toggle = document.getElementById('themeToggle');
     const buttons = toggle.querySelectorAll('button');
-
     buttons.forEach(btn => {
       btn.addEventListener('click', () => {
         buttons.forEach(b => b.classList.remove('active'));
@@ -1272,12 +988,17 @@ ${kfSnippets[v.kf].replace(v.kf, `loader-${v.id}-anim`)}
         document.documentElement.setAttribute('data-theme', btn.dataset.theme);
       });
     });
-
     if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
       document.documentElement.setAttribute('data-theme', 'dark');
       buttons.forEach(b => b.classList.remove('active'));
       toggle.querySelector('[data-theme="dark"]').classList.add('active');
     }
+
+    /* ═══════════════════════════════════════
+       INIT
+    ═══════════════════════════════════════ */
+    renderThumbs();
+    renderPreview();
   </script>
 </body>
 </html>
