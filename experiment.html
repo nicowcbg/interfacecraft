@@ -145,7 +145,7 @@
       padding: 36px 24px; border-bottom: 1px solid var(--border); flex-shrink: 0;
     }
     .preview-box {
-      width: 120px; height: 120px; border-radius: 14px;
+      width: 180px; height: 180px; border-radius: 14px;
       background: var(--bg-subtle); border: 1px solid var(--border-subtle);
       display: flex; align-items: center; justify-content: center;
       transition: background var(--transition), border-color var(--transition);
@@ -193,7 +193,7 @@
 
     /* ── Segmented Buttons ── */
     .seg-group {
-      display: flex; gap: 0; background: var(--bg-subtle);
+      display: flex; flex-wrap: wrap; gap: 0; background: var(--bg-subtle);
       border: 1px solid var(--border); border-radius: 8px; padding: 3px;
     }
     .seg-btn {
@@ -562,7 +562,7 @@
       <div class="control-group">
         <label class="control-label">Size</label>
         <div class="control-row">
-          <input type="range" class="slider" min="20" max="80" value="28" id="sizeSlider">
+          <input type="range" class="slider" min="20" max="200" value="28" id="sizeSlider">
           <span class="control-value" id="sizeValue">28px</span>
         </div>
       </div>
@@ -574,6 +574,9 @@
           <button class="seg-btn" data-val="4">4&times;4</button>
           <button class="seg-btn" data-val="5">5&times;5</button>
           <button class="seg-btn" data-val="7">7&times;7</button>
+          <button class="seg-btn" data-val="9">9&times;9</button>
+          <button class="seg-btn" data-val="13">13&times;13</button>
+          <button class="seg-btn" data-val="17">17&times;17</button>
         </div>
       </div>
 
@@ -624,6 +627,9 @@
       breathe:    { name: 'Breathe',    kf: 'vBreathe', dur: 2 },
       reverse:    { name: 'Reverse',    kf: 'vPulse', dur: 1.4 },
       arch:       { name: 'Arch',       kf: 'vPulse', dur: 1.8 },
+      portal:     { name: 'Portal',     kf: 'vPulse', dur: 1.8 },
+      tunnel:     { name: 'Tunnel',     kf: 'vPulse', dur: 1.8 },
+      cascade:    { name: 'Cascade',    kf: 'vGrow',  dur: 1.6 },
     };
 
     /* ═══════════════════════════════════════
@@ -656,6 +662,64 @@
           return { visible: false, delay: 0 };
         }
         return { visible: true, delay: k * 0.3 };
+      }
+      return { visible: false, delay: 0 };
+    }
+
+    function getPortalData(row, col, n, reverse) {
+      const step = 2;
+      let totalArches = 0;
+      for (let k = 0; ; k++) {
+        const o = k * step;
+        if (n - 2 * o < 3) break;
+        totalArches++;
+      }
+      for (let k = 0; k < totalArches; k++) {
+        const o = k * step;
+        const left = o, right = n - 1 - o, top = o;
+        let onArch = false;
+        // Top edge (skip corners for rounding)
+        if (row === top && col > left && col < right) onArch = true;
+        // Left side (extends to bottom)
+        if (col === left && row > top) onArch = true;
+        // Right side (extends to bottom)
+        if (col === right && row > top) onArch = true;
+        if (onArch) {
+          const delay = reverse
+            ? (totalArches - 1 - k) * 0.3
+            : k * 0.3;
+          return { visible: true, delay };
+        }
+      }
+      return { visible: false, delay: 0 };
+    }
+
+    function getCascadeData(row, col, n) {
+      const step = 2;
+      let totalArches = 0;
+      for (let k = 0; ; k++) {
+        const o = k * step;
+        if (n - 2 * o < 3) break;
+        totalArches++;
+      }
+      let globalOrder = 0;
+      for (let k = 0; k < totalArches; k++) {
+        const o = k * step;
+        const left = o, right = n - 1 - o, top = o;
+        // Trace the arch path: left side down, across top, right side down
+        const path = [];
+        // Left side from bottom to top+1
+        for (let r = n - 1; r > top; r--) path.push([r, left]);
+        // Top edge left+1 to right-1
+        for (let c = left + 1; c < right; c++) path.push([top, c]);
+        // Right side from top+1 to bottom
+        for (let r = top + 1; r < n; r++) path.push([r, right]);
+        for (let i = 0; i < path.length; i++) {
+          if (path[i][0] === row && path[i][1] === col) {
+            return { visible: true, delay: (globalOrder + i) * 0.03 };
+          }
+        }
+        globalOrder += path.length;
       }
       return { visible: false, delay: 0 };
     }
@@ -712,6 +776,15 @@
         case 'arch': {
           return getArchData(row, col, n);
         }
+        case 'portal': {
+          return getPortalData(row, col, n, false);
+        }
+        case 'tunnel': {
+          return getPortalData(row, col, n, true);
+        }
+        case 'cascade': {
+          return getCascadeData(row, col, n);
+        }
         default:
           return { visible: true, delay: 0 };
       }
@@ -724,7 +797,8 @@
       const { size, grid: n, shape, pattern } = state;
       const p = patterns[pattern];
       const el = document.getElementById('preview');
-      const gap = Math.max(1, Math.round(size * 0.08));
+      const maxGap = Math.max(1, Math.floor(size / n) - 1);
+      const gap = Math.max(1, Math.min(Math.round(size * 0.08), maxGap));
       const cellSize = (size - gap * (n - 1)) / n;
       const dotSize = Math.max(2, Math.round(cellSize * 0.75));
 
@@ -806,7 +880,8 @@
     function generateSnippet() {
       const { size, grid: n, shape, pattern } = state;
       const p = patterns[pattern];
-      const gap = Math.max(1, Math.round(size * 0.08));
+      const maxGap = Math.max(1, Math.floor(size / n) - 1);
+      const gap = Math.max(1, Math.min(Math.round(size * 0.08), maxGap));
       const cellSize = (size - gap * (n - 1)) / n;
       const dotSize = Math.max(2, Math.round(cellSize * 0.75));
 
@@ -885,7 +960,13 @@ ${kfCSS[p.kf]}
       });
     }
 
-    initSeg('gridSeg', 'grid');
+    initSeg('gridSeg', 'grid', () => {
+      const defaults = { 3: 28, 4: 28, 5: 28, 7: 40, 9: 56, 13: 100, 17: 140 };
+      const newSize = defaults[state.grid] || 28;
+      state.size = newSize;
+      sizeSlider.value = newSize;
+      sizeValue.textContent = newSize + 'px';
+    });
     initSeg('shapeSeg', 'shape');
 
     // Copy button
